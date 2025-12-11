@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta charset="UTF-8">
+    <title>Amigo Secreto</title>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --fg: #000000;
+        --border: #000000;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: "Courier New", Courier, monospace;
+      }
+
+      .container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      header, footer {
+        padding: 16px;
+        border-bottom: 1px solid var(--border);
+        text-align: center;
+      }
+
+      footer {
+        border-top: 1px solid var(--border);
+        border-bottom: none;
+        margin-top: auto;
+      }
+
+      .header-placeholder,
+      .footer-placeholder {
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px dashed #ccc;
+        font-size: 12px;
+      }
+
+      main {
+        padding: 16px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 8px;
+      }
+
+      p.descricao {
+        text-align: center;
+        font-size: 14px;
+        margin-bottom: 24px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 12px;
+      }
+
+      th, td {
+        border: 1px solid var(--border);
+        padding: 8px;
+        font-size: 14px;
+      }
+
+      th {
+        background: #f5f5f5;
+      }
+
+      input[type="text"], input[type="tel"] {
+        width: 100%;
+        padding: 6px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        color: var(--fg);
+        font-family: inherit;
+        font-size: 14px;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 8px 14px;
+        margin: 4px 2px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        color: var(--fg);
+        font-family: inherit;
+        font-size: 14px;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .btn-primary {
+        background: var(--fg);
+        color: var(--bg);
+      }
+
+      .btn-small {
+        padding: 4px 8px;
+        font-size: 12px;
+      }
+
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .linha-botoes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 24px;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      #status {
+        font-size: 13px;
+        min-height: 18px;
+        margin-bottom: 8px;
+      }
+
+      #resultado {
+        margin-top: 24px;
+      }
+
+      #resultado h2 {
+        margin-bottom: 8px;
+        font-size: 16px;
+        text-align: center;
+      }
+
+      /* Modo visualização (quem recebeu o link) */
+
+      #viewSection {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 50vh;
+      }
+
+      .view-card {
+        border: 1px solid #000000;
+        padding: 24px 32px;
+        max-width: 480px;
+        text-align: center;
+      }
+
+      .view-card h1 {
+        margin-top: 0;
+        margin-bottom: 16px;
+        font-size: 22px;
+      }
+
+      .view-card p {
+        margin: 8px 0;
+        font-size: 15px;
+      }
+
+      .view-nome {
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 16px;
+        margin-bottom: 8px;
+      }
+
+      .observacao {
+        margin-top: 16px;
+        font-size: 12px;
+        color: #555555;
+      }
+
+      @media (max-width: 600px) {
+        th:nth-child(3),
+        td:nth-child(3) {
+          width: 60px;
+        }
+
+        .view-card {
+          padding: 16px 18px;
+          margin: 0 8px;
+        }
+      }
+
+      /* HEADER E FOOTER BÁSICOS */
+header,
+footer {
+  padding: 0;
+  margin: 0;
+}
+
+/* CAIXAS QUE SEGURAM AS IMAGENS */
+.header-placeholder,
+.footer-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* tira bordas antigas, se tiver */
+  border: none;
+  padding: 0;
+}
+
+/* ALTURA DO HEADER (AJUSTE AQUI SE QUISER MAIOR/MENOR) */
+.header-placeholder {
+  height: 160px;           /* altura fixa */
+}
+
+/* ALTURA DO FOOTER (AQUI O GIF) */
+.footer-placeholder {
+  height: 90px;            /* altura fixa pro gif */
+}
+
+/* IMAGENS DO HEADER E FOOTER */
+.header-placeholder img,
+.footer-placeholder img {
+  max-width: 100%;         /* nunca passa da largura da tela */
+  max-height: 100%;        /* nunca passa da altura do container */
+  height: auto;
+  width: auto;
+  display: block;
+}
+
+/* OPCIONAL: SE QUISER O HEADER UM POUCO MAIS RESPONSIVO */
+@media (max-width: 600px) {
+  .header-placeholder {
+    height: 120px;
+  }
+
+  .footer-placeholder {
+    height: 70px;
+  }
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="header-placeholder">
+         <img src="familyguys.png">
+        </div>
+      </header>
+
+      <main>
+        <!-- Seção ADMIN (cadastro e sorteio) -->
+        <div id="adminSection">
+          <h1>Amigo Secreto</h1>
+          <p class="descricao">
+            Digite os nomes e telefones, clique em "Sortear amigo secreto" e depois envie o link
+            individual pelo WhatsApp para cada participante.
+          </p>
+
+          <div id="status"></div>
+
+          <table id="participantsTable">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Telefone (com DDI/DDD)</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="participantsBody">
+              <!-- Linhas adicionadas via JavaScript -->
+            </tbody>
+          </table>
+
+          <div class="linha-botoes">
+            <button type="button" class="btn" id="addRowBtn">+ Adicionar pessoa</button>
+            <button type="button" class="btn btn-primary" id="sortearBtn">Sortear amigo secreto</button>
+          </div>
+
+          <div id="resultado" class="hidden">
+            <h2>Envio de links pelo WhatsApp</h2>
+            <p style="font-size: 13px; text-align: center; margin-bottom: 8px;">
+              Clique em "Enviar código" ao lado de cada nome para abrir o WhatsApp com a mensagem pronta.
+            </p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Telefone</th>
+                  <th>Link</th>
+                </tr>
+              </thead>
+              <tbody id="sendBody">
+                <!-- Preenchido após o sorteio -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Seção VISUALIZAÇÃO (quem recebeu o link) -->
+        <div id="viewSection" class="hidden">
+          <div class="view-card">
+            <h1>Amigo Secreto</h1>
+            <p id="viewStatus">Carregando seu amigo secreto...</p>
+
+            <div id="viewContent" class="hidden">
+              <p>Olá, <strong id="viewGiver"></strong>!</p>
+              <p>O seu amigo secreto é:</p>
+              <p class="view-nome" id="viewName"></p>
+              <p class="observacao">
+                Guarde este nome em segredo 😉<br>
+                (Se você recebeu este link, ele é só seu.)
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer>
+        <div class="footer-placeholder">
+         <img src="foot2.gif" alt="Reset">
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // URL do Apps Script (sua API)
+      const APP_URL = 'https://script.google.com/macros/s/AKfycbxZYHhMONby1iKjlAWV48EL9WD8W1Zz3vAkR2YYOBl_QNnIh3BZqAPV7qi_sREkH9C-Nw/exec';
+
+      // URL da própria página (pra gerar o link que vai pro WhatsApp)
+      const SITE_URL = window.location.origin + window.location.pathname;
+
+      let ultimoResultado = [];
+
+      function adicionarLinha(nome = '', telefone = '') {
+        const tbody = document.getElementById('participantsBody');
+        const tr = document.createElement('tr');
+
+        const tdNome = document.createElement('td');
+        const inputNome = document.createElement('input');
+        inputNome.type = 'text';
+        inputNome.placeholder = 'Nome';
+        inputNome.value = nome;
+        tdNome.appendChild(inputNome);
+
+        const tdTel = document.createElement('td');
+        const inputTel = document.createElement('input');
+        inputTel.type = 'tel';
+        inputTel.placeholder = 'Ex: 5581999999999';
+        inputTel.value = telefone;
+        tdTel.appendChild(inputTel);
+
+        const tdAcoes = document.createElement('td');
+        const btnRemover = document.createElement('button');
+        btnRemover.type = 'button';
+        btnRemover.textContent = 'x';
+        btnRemover.className = 'btn btn-small';
+        btnRemover.onclick = function () {
+          tbody.removeChild(tr);
+        };
+        tdAcoes.appendChild(btnRemover);
+
+        tr.appendChild(tdNome);
+        tr.appendChild(tdTel);
+        tr.appendChild(tdAcoes);
+
+        tbody.appendChild(tr);
+      }
+
+      function coletarParticipantes() {
+        const linhas = document.querySelectorAll('#participantsBody tr');
+        const participantes = [];
+        linhas.forEach(linha => {
+          const inputs = linha.querySelectorAll('input');
+          const nome = inputs[0].value.trim();
+          const telefone = inputs[1].value.trim();
+          if (nome && telefone) {
+            participantes.push({ name: nome, phone: telefone });
+          }
+        });
+        return participantes;
+      }
+
+      function mostrarStatus(msg, erro = false) {
+        const el = document.getElementById('status');
+        el.textContent = msg || '';
+        el.style.color = erro ? 'red' : 'black';
+      }
+
+      function sortear() {
+        const participantes = coletarParticipantes();
+        if (participantes.length < 2) {
+          mostrarStatus('Adicione pelo menos 2 participantes com nome e telefone.', true);
+          return;
+        }
+
+        mostrarStatus('Sorteando... aguarde.');
+        document.getElementById('sortearBtn').disabled = true;
+
+        const names = participantes.map(p => p.name).join('|');
+        const phones = participantes.map(p => p.phone).join('|');
+
+        const url = APP_URL +
+          '?mode=sortear&names=' + encodeURIComponent(names) +
+          '&phones=' + encodeURIComponent(phones);
+
+        fetch(url)
+          .then(r => r.json())
+          .then(data => {
+            document.getElementById('sortearBtn').disabled = false;
+            if (!data.ok) {
+              mostrarStatus('Erro ao sortear: ' + (data.error || 'desconhecido'), true);
+              return;
+            }
+            ultimoResultado = data.data || [];
+            if (!ultimoResultado.length) {
+              mostrarStatus('Sorteio não retornou dados. Tente novamente.', true);
+              return;
+            }
+            preencherTabelaEnvio(ultimoResultado);
+            mostrarStatus('Sorteio realizado com sucesso! Agora envie os links pelo WhatsApp.');
+          })
+          .catch(err => {
+            document.getElementById('sortearBtn').disabled = false;
+            mostrarStatus('Erro ao conectar com o servidor: ' + err, true);
+          });
+      }
+
+      function preencherTabelaEnvio(dados) {
+        const divResultado = document.getElementById('resultado');
+        const tbody = document.getElementById('sendBody');
+        tbody.innerHTML = '';
+
+        dados.forEach(item => {
+          const tr = document.createElement('tr');
+
+          const tdNome = document.createElement('td');
+          tdNome.textContent = item.name;
+
+          const tdTel = document.createElement('td');
+          tdTel.textContent = item.phone;
+
+          const tdBtn = document.createElement('td');
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.textContent = 'Enviar código';
+          btn.className = 'btn btn-small btn-primary';
+          btn.onclick = function () {
+            enviarCodigoWhatsApp(item);
+          };
+          tdBtn.appendChild(btn);
+
+          tr.appendChild(tdNome);
+          tr.appendChild(tdTel);
+          tr.appendChild(tdBtn);
+
+          tbody.appendChild(tr);
+        });
+
+        divResultado.classList.remove('hidden');
+      }
+
+      function enviarCodigoWhatsApp(item) {
+        const telefone = (item.phone || '').replace(/\D/g, '');
+        if (!telefone) {
+          alert('Telefone inválido para ' + item.name);
+          return;
+        }
+
+        const link = SITE_URL + '?t=' + encodeURIComponent(item.token);
+        const mensagem = 'Seu link pra saber seu amigo secreto eh esse abaixo, clique nele:\n' + link;
+
+        const url = 'https://wa.me/' + telefone + '?text=' + encodeURIComponent(mensagem);
+        window.open(url, '_blank');
+      }
+
+      // ====== MODO VISUALIZAÇÃO (quem recebeu o link) ======
+
+      function entrarModoVisualizacao(token) {
+        document.getElementById('adminSection').classList.add('hidden');
+        document.getElementById('viewSection').classList.remove('hidden');
+
+        const statusEl = document.getElementById('viewStatus');
+        const contentEl = document.getElementById('viewContent');
+        const giverEl = document.getElementById('viewGiver');
+        const nameEl = document.getElementById('viewName');
+
+        statusEl.textContent = 'Carregando seu amigo secreto...';
+        contentEl.classList.add('hidden');
+
+        const url = APP_URL + '?t=' + encodeURIComponent(token);
+
+        fetch(url)
+          .then(r => r.json())
+          .then(data => {
+            if (!data.ok) {
+              statusEl.textContent = 'Ops! Não encontramos um amigo secreto para este link.';
+              return;
+            }
+            statusEl.textContent = '';
+            giverEl.textContent = data.giverName || '';
+            nameEl.textContent = data.friendName || '???';
+            contentEl.classList.remove('hidden');
+          })
+          .catch(err => {
+            statusEl.textContent = 'Erro ao carregar informações. Tente novamente mais tarde.';
+          });
+      }
+
+      function entrarModoAdmin() {
+        document.getElementById('adminSection').classList.remove('hidden');
+        document.getElementById('viewSection').classList.add('hidden');
+
+        // Começa com duas linhas
+        adicionarLinha();
+        adicionarLinha();
+      }
+
+      // ====== Inicialização ======
+      document.addEventListener('DOMContentLoaded', function () {
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get('t');
+
+        if (token) {
+          entrarModoVisualizacao(token);
+        } else {
+          entrarModoAdmin();
+        }
+
+        const addBtn = document.getElementById('addRowBtn');
+        if (addBtn) {
+          addBtn.addEventListener('click', function () {
+            adicionarLinha();
+          });
+        }
+        const sortearBtn = document.getElementById('sortearBtn');
+        if (sortearBtn) {
+          sortearBtn.addEventListener('click', sortear);
+        }
+      });
+    </script>
+  </body>
+</html>

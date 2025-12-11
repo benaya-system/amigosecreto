@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta charset="UTF-8">
+    <title>Amigo Secreto</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: #ffffff;
+        color: #000000;
+        font-family: "Courier New", Courier, monospace;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
+
+      .card {
+        border: 1px solid #000000;
+        padding: 24px 32px;
+        max-width: 480px;
+        text-align: center;
+      }
+
+      h1 {
+        margin-top: 0;
+        margin-bottom: 16px;
+        font-size: 22px;
+      }
+
+      p {
+        margin: 8px 0;
+        font-size: 15px;
+      }
+
+      .nome {
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 16px;
+        margin-bottom: 8px;
+      }
+
+      .observacao {
+        margin-top: 16px;
+        font-size: 12px;
+        color: #555555;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Amigo Secreto</h1>
+
+      <? if (dados.ok) { ?>
+        <p>Olá, <strong><?= dados.giverName ?></strong>!</p>
+        <p>O seu amigo secreto é:</p>
+        <p class="nome"><?= dados.friendName ?></p>
+        <p class="observacao">
+          Guarde este nome em segredo 😉<br>
+          (Se você recebeu este link, ele é só seu.)
+        </p>
+      <? } else { ?>
+        <p>Ops! Não encontramos um amigo secreto para este link.</p>
+        <p class="observacao">
+          Talvez o link esteja incorreto ou o sorteio tenha sido reiniciado.
+        </p>
+      <? } ?>
+    </div>
+  </body>
+</html>
