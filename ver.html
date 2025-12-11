@@ -6,47 +6,72 @@
     <title>Amigo Secreto</title>
     <style>
       body {
-        margin: 0;
-        padding: 0;
-        background: #ffffff;
-        color: #000000;
-        font-family: "Courier New", Courier, monospace;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-      }
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  color: #000000;
+  font-family: "Comic Sans MS", "Baloo 2", "Fredoka", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
 
-      .card {
-        border: 1px solid #000000;
-        padding: 24px 32px;
-        max-width: 480px;
-        text-align: center;
-      }
+.card {
+  border: 3px solid #000000;
+  padding: 24px 32px;
+  max-width: 480px;
+  width: calc(100% - 32px);
+  text-align: center;
+  border-radius: 16px;
+  box-shadow: 4px 4px 0 #000000;
+}
 
-      h1 {
-        margin-top: 0;
-        margin-bottom: 16px;
-        font-size: 22px;
-      }
+h1 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 24px;
+  letter-spacing: 1px;
+}
 
-      p {
-        margin: 8px 0;
-        font-size: 15px;
-      }
+p {
+  margin: 8px 0;
+  font-size: 15px;
+}
 
-      .nome {
-        font-size: 20px;
-        font-weight: bold;
-        margin-top: 16px;
-        margin-bottom: 8px;
-      }
+.nome {
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
 
-      .observacao {
-        margin-top: 16px;
-        font-size: 12px;
-        color: #555555;
-      }
+.observacao {
+  margin-top: 16px;
+  font-size: 12px;
+  color: #555555;
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+  .card {
+    padding: 18px 16px;
+    width: calc(100% - 20px);
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  .nome {
+    font-size: 20px;
+  }
+}
+
     </style>
   </head>
   <body>
@@ -70,3 +95,4 @@
     </div>
   </body>
 </html>
+
