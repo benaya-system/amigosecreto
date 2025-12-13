@@ -370,7 +370,7 @@
           <h1>Amigo Secreto</h1>
           <p class="descricao">
             Digite os nomes e telefones, clique em "Sortear amigo secreto" e depois envie o link
-            individual pelo WhatsApp para cada participante.
+            individual pelo WhatsApp ou Telegram para cada participante.
           </p>
 
           <div id="status"></div>
@@ -394,16 +394,16 @@
           </div>
 
           <div id="resultado" class="hidden">
-            <h2>Envio de links pelo WhatsApp</h2>
+            <h2>Envio de links</h2>
             <p style="font-size: 13px; text-align: center; margin-bottom: 8px;">
-              Clique em "Enviar código" ao lado de cada nome para abrir o WhatsApp com a mensagem pronta.
+              Use os botões ao lado de cada nome para abrir WhatsApp ou Telegram com a mensagem pronta.
             </p>
             <table>
               <thead>
                 <tr>
                   <th>Nome</th>
                   <th>Telefone</th>
-                  <th>Link</th>
+                  <th>Ações</th>
                 </tr>
               </thead>
               <tbody id="sendBody">
@@ -445,13 +445,13 @@
       // URL do Apps Script (sua API)
       const APP_URL = 'https://script.google.com/macros/s/AKfycbxZYHhMONby1iKjlAWV48EL9WD8W1Zz3vAkR2YYOBl_QNnIh3BZqAPV7qi_sREkH9C-Nw/exec';
 
-      // URL da própria página (pra gerar o link que vai pro WhatsApp)
+      // URL da própria página (pra gerar o link que vai pro WhatsApp/Telegram)
       const SITE_URL = window.location.origin + window.location.pathname;
 
       let ultimoResultado = [];
 
       function getDefaultCountryCode() {
-        // Tentativa de detectar pelo idioma; fallback = 55 (Brasil)
+        // Tentativa simples com base no idioma; fallback = 55 (Brasil)
         const lang = (navigator.language || '').toLowerCase();
         if (lang.startsWith('pt-br')) return '55';
         if (lang.startsWith('en-us') || lang.startsWith('en-ca')) return '1';
@@ -508,7 +508,7 @@
         wrapper.appendChild(inputTel);
         tdTel.appendChild(wrapper);
 
-        // AÇÕES
+        // AÇÕES (botão x de remover linha)
         const tdAcoes = document.createElement('td');
         const btnRemover = document.createElement('button');
         btnRemover.type = 'button';
@@ -588,7 +588,7 @@
               return;
             }
             preencherTabelaEnvio(ultimoResultado);
-            mostrarStatus('Sorteio realizado com sucesso! Agora envie os links pelo WhatsApp.');
+            mostrarStatus('Sorteio realizado com sucesso! Agora envie os links.');
           })
           .catch(err => {
             document.getElementById('sortearBtn').disabled = false;
@@ -610,19 +610,30 @@
           const tdTel = document.createElement('td');
           tdTel.textContent = item.phone;
 
-          const tdBtn = document.createElement('td');
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.textContent = 'Enviar código';
-          btn.className = 'btn btn-small btn-primary';
-          btn.onclick = function () {
+          const tdAcoes = document.createElement('td');
+
+          const btnWA = document.createElement('button');
+          btnWA.type = 'button';
+          btnWA.textContent = 'WhatsApp';
+          btnWA.className = 'btn btn-small btn-primary';
+          btnWA.onclick = function () {
             enviarCodigoWhatsApp(item);
           };
-          tdBtn.appendChild(btn);
+
+          const btnTG = document.createElement('button');
+          btnTG.type = 'button';
+          btnTG.textContent = 'Telegram';
+          btnTG.className = 'btn btn-small';
+          btnTG.onclick = function () {
+            enviarCodigoTelegram(item);
+          };
+
+          tdAcoes.appendChild(btnWA);
+          tdAcoes.appendChild(btnTG);
 
           tr.appendChild(tdNome);
           tr.appendChild(tdTel);
-          tr.appendChild(tdBtn);
+          tr.appendChild(tdAcoes);
 
           tbody.appendChild(tr);
         });
@@ -630,17 +641,32 @@
         divResultado.classList.remove('hidden');
       }
 
+      // Abre só o WhatsApp com mensagem pronta (sem escolher número aqui)
       function enviarCodigoWhatsApp(item) {
-        const telefone = (item.phone || '').replace(/\D/g, '');
-        if (!telefone) {
-          alert('Telefone inválido para ' + item.name);
-          return;
-        }
-
         const link = SITE_URL + '?t=' + encodeURIComponent(item.token);
-        const mensagem = 'Seu link pra saber seu amigo secreto eh esse abaixo, clique nele:\n' + link;
+        const mensagem =
+          'Olá ' + item.name +
+          ', clique no link abaixo pra saber quem você tirou no amigo secreto:\n' +
+          link;
 
-        const url = 'https://wa.me/' + telefone + '?text=' + encodeURIComponent(mensagem);
+        const url = 'https://wa.me/?text=' + encodeURIComponent(mensagem);
+        window.open(url, '_blank');
+      }
+
+      // Abre o Telegram com mensagem pronta
+      function enviarCodigoTelegram(item) {
+        const link = SITE_URL + '?t=' + encodeURIComponent(item.token);
+        const mensagem =
+          'Olá ' + item.name +
+          ', clique no link abaixo pra saber quem você tirou no amigo secreto:\n' +
+          link;
+
+        const url =
+          'https://t.me/share/url?url=' +
+          encodeURIComponent(link) +
+          '&text=' +
+          encodeURIComponent(mensagem);
+
         window.open(url, '_blank');
       }
 
