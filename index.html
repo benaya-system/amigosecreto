@@ -24,7 +24,8 @@
         padding: 0;
         background: var(--bg);
         color: var(--fg);
-        font-family: "Comic Sans MS", "Baloo 2", "Fredoka", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family: "Comic Sans MS", "Baloo 2", "Fredoka",
+          system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       }
 
       /* Layout geral */
@@ -34,7 +35,7 @@
         flex-direction: column;
       }
 
-      /* HEADER e FOOTER sem linhas de divisão */
+      /* HEADER e FOOTER */
       header,
       footer {
         padding: 8px 12px;
@@ -43,7 +44,6 @@
         box-shadow: none;
       }
 
-      /* Caixas das imagens (header e footer) */
       .header-placeholder,
       .footer-placeholder {
         display: flex;
@@ -53,7 +53,6 @@
         padding: 0;
       }
 
-      /* Alturas pensadas pra desktop/tablet */
       .header-placeholder {
         height: 160px;
       }
@@ -62,7 +61,6 @@
         height: 90px;
       }
 
-      /* Imagens responsivas */
       .header-placeholder img,
       .footer-placeholder img {
         max-width: 100%;
@@ -93,7 +91,7 @@
         margin-bottom: 24px;
       }
 
-      /* Tabela */
+      /* Tabelas */
       table {
         width: 100%;
         border-collapse: collapse;
@@ -111,9 +109,8 @@
         background: #f5f5f5;
       }
 
-      /* Inputs básicos */
-      input[type="text"],
-      input[type="tel"] {
+      /* Inputs */
+      input[type="text"] {
         width: 100%;
         padding: 6px;
         border: 2px solid var(--border);
@@ -122,36 +119,6 @@
         font-family: inherit;
         font-size: 14px;
         border-radius: 6px;
-      }
-
-      /* Wrapper do telefone: botãozinho + campo */
-      .phone-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-
-      /* "botão" de código do país (select cartoon) */
-      .phone-country {
-        padding: 6px 8px;
-        border: 3px solid var(--border);
-        border-radius: 999px;
-        background: var(--btn-blue);
-        color: var(--fg);
-        font-family: inherit;
-        font-size: 13px;
-        cursor: pointer;
-        box-shadow: 3px 3px 0 #000000;
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        text-align: center;
-        min-width: 80px;
-      }
-
-      /* campo de número (sem DDI) */
-      .phone-number {
-        flex: 1;
       }
 
       /* Botões estilo cartoon */
@@ -163,13 +130,15 @@
         background: var(--btn-yellow);
         color: var(--fg);
         font-family: inherit;
-        font-size: 14px;
+        font-size: 13px;
         cursor: pointer;
         text-transform: uppercase;
         letter-spacing: 1px;
         border-radius: 999px;
         box-shadow: 3px 3px 0 #000000;
-        transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+        transition: transform 0.08s ease,
+          box-shadow 0.08s ease,
+          filter 0.08s ease;
       }
 
       .btn-primary {
@@ -181,7 +150,6 @@
         font-size: 12px;
       }
 
-      /* Efeito de clique/hover cartoon */
       .btn:hover {
         transform: translate(-2px, -2px);
         box-shadow: 5px 5px 0 #000000;
@@ -200,7 +168,6 @@
         box-shadow: 3px 3px 0 #000000;
       }
 
-      /* Linha dos botões */
       .linha-botoes {
         display: flex;
         flex-wrap: wrap;
@@ -208,7 +175,6 @@
         margin-bottom: 24px;
       }
 
-      /* Utilitários */
       .hidden {
         display: none;
       }
@@ -219,7 +185,7 @@
         margin-bottom: 8px;
       }
 
-      /* Resultado do sorteio (tabela de envio) */
+      /* Resultado do sorteio */
       #resultado {
         margin-top: 24px;
       }
@@ -273,8 +239,7 @@
         color: #555555;
       }
 
-      /* ===== Responsivo / Mobile-first ===== */
-
+      /* Responsivo */
       @media (max-width: 768px) {
         main {
           padding: 12px;
@@ -369,8 +334,8 @@
         <div id="adminSection">
           <h1>Amigo Secreto</h1>
           <p class="descricao">
-            Digite os nomes e telefones, clique em "Sortear amigo secreto" e depois envie o link
-            individual pelo WhatsApp ou Telegram para cada participante.
+            Digite apenas os nomes, clique em "Sortear amigo secreto" e depois
+            use os botões para enviar o link por WhatsApp, Telegram ou copiar a mensagem.
           </p>
 
           <div id="status"></div>
@@ -379,7 +344,6 @@
             <thead>
               <tr>
                 <th>Nome</th>
-                <th>Telefone (com DDI/DDD)</th>
                 <th>Ações</th>
               </tr>
             </thead>
@@ -389,20 +353,24 @@
           </table>
 
           <div class="linha-botoes">
-            <button type="button" class="btn" id="addRowBtn">+ Adicionar pessoa</button>
-            <button type="button" class="btn btn-primary" id="sortearBtn">Sortear amigo secreto</button>
+            <button type="button" class="btn" id="addRowBtn">
+              + Adicionar pessoa
+            </button>
+            <button type="button" class="btn btn-primary" id="sortearBtn">
+              Sortear amigo secreto
+            </button>
           </div>
 
           <div id="resultado" class="hidden">
             <h2>Envio de links</h2>
             <p style="font-size: 13px; text-align: center; margin-bottom: 8px;">
-              Use os botões ao lado de cada nome para abrir WhatsApp ou Telegram com a mensagem pronta.
+              Use os botões ao lado de cada nome para abrir WhatsApp, Telegram
+              ou copiar a mensagem com o link.
             </p>
             <table>
               <thead>
                 <tr>
                   <th>Nome</th>
-                  <th>Telefone</th>
                   <th>Ações</th>
                 </tr>
               </thead>
@@ -443,28 +411,18 @@
 
     <script>
       // URL do Apps Script (sua API)
-      const APP_URL = 'https://script.google.com/macros/s/AKfycbxZYHhMONby1iKjlAWV48EL9WD8W1Zz3vAkR2YYOBl_QNnIh3BZqAPV7qi_sREkH9C-Nw/exec';
+      const APP_URL =
+        'https://script.google.com/macros/s/AKfycbxZYHhMONby1iKjlAWV48EL9WD8W1Zz3vAkR2YYOBl_QNnIh3BZqAPV7qi_sREkH9C-Nw/exec';
 
-      // URL da própria página (pra gerar o link que vai pro WhatsApp/Telegram)
+      // URL da própria página (pra gerar o link)
       const SITE_URL = window.location.origin + window.location.pathname;
 
       let ultimoResultado = [];
 
-      function getDefaultCountryCode() {
-        // Tentativa simples com base no idioma; fallback = 55 (Brasil)
-        const lang = (navigator.language || '').toLowerCase();
-        if (lang.startsWith('pt-br')) return '55';
-        if (lang.startsWith('en-us') || lang.startsWith('en-ca')) return '1';
-        if (lang.startsWith('pt-pt')) return '351';
-        if (lang.startsWith('es-')) return '34';
-        return '55';
-      }
-
-      function adicionarLinha(nome = '', telefone = '') {
+      function adicionarLinha(nome = '') {
         const tbody = document.getElementById('participantsBody');
         const tr = document.createElement('tr');
 
-        // NOME
         const tdNome = document.createElement('td');
         const inputNome = document.createElement('input');
         inputNome.type = 'text';
@@ -472,43 +430,6 @@
         inputNome.value = nome;
         tdNome.appendChild(inputNome);
 
-        // TELEFONE: DDI + número
-        const tdTel = document.createElement('td');
-        const wrapper = document.createElement('div');
-        wrapper.className = 'phone-wrapper';
-
-        const countrySelect = document.createElement('select');
-        countrySelect.className = 'phone-country';
-
-        const countryOptions = [
-          { code: '55', label: '+55 🇧🇷' },
-          { code: '1',  label: '+1 🇺🇸/🇨🇦' },
-          { code: '44', label: '+44 🇬🇧' },
-          { code: '351', label: '+351 🇵🇹' },
-          { code: '34', label: '+34 🇪🇸' }
-        ];
-
-        countryOptions.forEach(opt => {
-          const o = document.createElement('option');
-          o.value = opt.code;
-          o.textContent = opt.label;
-          countrySelect.appendChild(o);
-        });
-
-        // padrão: país detectado ou 55
-        countrySelect.value = getDefaultCountryCode();
-
-        const inputTel = document.createElement('input');
-        inputTel.type = 'tel';
-        inputTel.placeholder = 'Ex: 81999999999'; // sem DDI
-        inputTel.value = '';
-        inputTel.className = 'phone-number';
-
-        wrapper.appendChild(countrySelect);
-        wrapper.appendChild(inputTel);
-        tdTel.appendChild(wrapper);
-
-        // AÇÕES (botão x de remover linha)
         const tdAcoes = document.createElement('td');
         const btnRemover = document.createElement('button');
         btnRemover.type = 'button';
@@ -520,7 +441,6 @@
         tdAcoes.appendChild(btnRemover);
 
         tr.appendChild(tdNome);
-        tr.appendChild(tdTel);
         tr.appendChild(tdAcoes);
 
         tbody.appendChild(tr);
@@ -530,21 +450,12 @@
         const linhas = document.querySelectorAll('#participantsBody tr');
         const participantes = [];
 
-        linhas.forEach(linha => {
+        linhas.forEach((linha) => {
           const inputNome = linha.querySelector('td:nth-child(1) input');
-          const countrySelect = linha.querySelector('.phone-country');
-          const phoneInput = linha.querySelector('.phone-number');
-
-          if (!inputNome || !countrySelect || !phoneInput) return;
-
+          if (!inputNome) return;
           const nome = inputNome.value.trim();
-          const ddi = (countrySelect.value || '').trim();
-          const local = phoneInput.value.trim();
-
-          if (nome && local) {
-            const localDigits = local.replace(/\D/g, '');
-            const numeroCompleto = (ddi + localDigits).replace(/\D/g, '');
-            participantes.push({ name: nome, phone: numeroCompleto });
+          if (nome) {
+            participantes.push({ name: nome });
           }
         });
 
@@ -560,39 +471,58 @@
       function sortear() {
         const participantes = coletarParticipantes();
         if (participantes.length < 2) {
-          mostrarStatus('Adicione pelo menos 2 participantes com nome e telefone.', true);
+          mostrarStatus(
+            'Adicione pelo menos 2 participantes com nome.',
+            true
+          );
           return;
         }
 
         mostrarStatus('Sorteando... aguarde.');
         document.getElementById('sortearBtn').disabled = true;
 
-        const names = participantes.map(p => p.name).join('|');
-        const phones = participantes.map(p => p.phone).join('|');
+        const names = participantes.map((p) => p.name).join('|');
+        // Phones vazios só pra manter o formato esperado pela API
+        const phones = new Array(participantes.length).fill('').join('|');
 
-        const url = APP_URL +
-          '?mode=sortear&names=' + encodeURIComponent(names) +
-          '&phones=' + encodeURIComponent(phones);
+        const url =
+          APP_URL +
+          '?mode=sortear&names=' +
+          encodeURIComponent(names) +
+          '&phones=' +
+          encodeURIComponent(phones);
 
         fetch(url)
-          .then(r => r.json())
-          .then(data => {
+          .then((r) => r.json())
+          .then((data) => {
             document.getElementById('sortearBtn').disabled = false;
             if (!data.ok) {
-              mostrarStatus('Erro ao sortear: ' + (data.error || 'desconhecido'), true);
+              mostrarStatus(
+                'Erro ao sortear: ' + (data.error || 'desconhecido'),
+                true
+              );
               return;
             }
-            ultimoResultado = (data.data || []);
+            ultimoResultado = data.data || [];
             if (!ultimoResultado.length) {
-              mostrarStatus('Sorteio não retornou dados. Tente novamente.', true);
+              mostrarStatus(
+                'Sorteio não retornou dados. Tente novamente.',
+                true
+              );
               return;
             }
             preencherTabelaEnvio(ultimoResultado);
-            mostrarStatus('Sorteio realizado com sucesso! Agora envie os links.');
+            mostrarStatus(
+              'Sorteio realizado com sucesso! Agora envie os links.',
+              false
+            );
           })
-          .catch(err => {
+          .catch((err) => {
             document.getElementById('sortearBtn').disabled = false;
-            mostrarStatus('Erro ao conectar com o servidor: ' + err, true);
+            mostrarStatus(
+              'Erro ao conectar com o servidor: ' + err,
+              true
+            );
           });
       }
 
@@ -601,14 +531,11 @@
         const tbody = document.getElementById('sendBody');
         tbody.innerHTML = '';
 
-        dados.forEach(item => {
+        dados.forEach((item) => {
           const tr = document.createElement('tr');
 
           const tdNome = document.createElement('td');
           tdNome.textContent = item.name;
-
-          const tdTel = document.createElement('td');
-          tdTel.textContent = item.phone;
 
           const tdAcoes = document.createElement('td');
 
@@ -628,11 +555,19 @@
             enviarCodigoTelegram(item);
           };
 
+          const btnCopy = document.createElement('button');
+          btnCopy.type = 'button';
+          btnCopy.textContent = 'Copiar link';
+          btnCopy.className = 'btn btn-small';
+          btnCopy.onclick = function () {
+            copiarMensagem(item);
+          };
+
           tdAcoes.appendChild(btnWA);
           tdAcoes.appendChild(btnTG);
+          tdAcoes.appendChild(btnCopy);
 
           tr.appendChild(tdNome);
-          tr.appendChild(tdTel);
           tr.appendChild(tdAcoes);
 
           tbody.appendChild(tr);
@@ -641,40 +576,70 @@
         divResultado.classList.remove('hidden');
       }
 
-      // Abre só o WhatsApp com mensagem pronta (sem escolher número aqui)
-      function enviarCodigoWhatsApp(item) {
+      function montarMensagem(item) {
         const link = SITE_URL + '?t=' + encodeURIComponent(item.token);
-        const mensagem =
-          'Olá ' + item.name +
+        return (
+          'Olá ' +
+          item.name +
           ', clique no link abaixo pra saber quem você tirou no amigo secreto:\n' +
-          link;
+          link
+        );
+      }
 
-        const url = 'https://wa.me/?text=' + encodeURIComponent(mensagem);
+      function enviarCodigoWhatsApp(item) {
+        const mensagem = montarMensagem(item);
+        const url =
+          'https://wa.me/?text=' + encodeURIComponent(mensagem);
         window.open(url, '_blank');
       }
 
-      // Abre o Telegram com mensagem pronta
       function enviarCodigoTelegram(item) {
         const link = SITE_URL + '?t=' + encodeURIComponent(item.token);
-        const mensagem =
-          'Olá ' + item.name +
-          ', clique no link abaixo pra saber quem você tirou no amigo secreto:\n' +
-          link;
-
+        const texto =
+          'Olá ' +
+          item.name +
+          ', clique no link abaixo pra saber quem você tirou no amigo secreto:';
         const url =
           'https://t.me/share/url?url=' +
           encodeURIComponent(link) +
           '&text=' +
-          encodeURIComponent(mensagem);
-
+          encodeURIComponent(texto);
         window.open(url, '_blank');
+      }
+
+      function copiarMensagem(item) {
+        const mensagem = montarMensagem(item);
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard
+            .writeText(mensagem)
+            .then(() => {
+              alert('Mensagem copiada para a área de transferência!');
+            })
+            .catch(() => {
+              fallbackPrompt(mensagem);
+            });
+        } else {
+          fallbackPrompt(mensagem);
+        }
+      }
+
+      function fallbackPrompt(texto) {
+        window.prompt(
+          'Copie a mensagem abaixo (Ctrl+C / Command+C):',
+          texto
+        );
       }
 
       // ====== MODO VISUALIZAÇÃO (quem recebeu o link) ======
 
       function entrarModoVisualizacao(token) {
-        document.getElementById('adminSection').classList.add('hidden');
-        document.getElementById('viewSection').classList.remove('hidden');
+        document
+          .getElementById('adminSection')
+          .classList.add('hidden');
+        document
+          .getElementById('viewSection')
+          .classList.remove('hidden');
 
         const statusEl = document.getElementById('viewStatus');
         const contentEl = document.getElementById('viewContent');
@@ -687,10 +652,11 @@
         const url = APP_URL + '?t=' + encodeURIComponent(token);
 
         fetch(url)
-          .then(r => r.json())
-          .then(data => {
+          .then((r) => r.json())
+          .then((data) => {
             if (!data.ok) {
-              statusEl.textContent = 'Ops! Não encontramos um amigo secreto para este link.';
+              statusEl.textContent =
+                'Ops! Não encontramos um amigo secreto para este link.';
               return;
             }
             statusEl.textContent = '';
@@ -698,14 +664,19 @@
             nameEl.textContent = data.friendName || '???';
             contentEl.classList.remove('hidden');
           })
-          .catch(err => {
-            statusEl.textContent = 'Erro ao carregar informações. Tente novamente mais tarde.';
+          .catch(() => {
+            statusEl.textContent =
+              'Erro ao carregar informações. Tente novamente mais tarde.';
           });
       }
 
       function entrarModoAdmin() {
-        document.getElementById('adminSection').classList.remove('hidden');
-        document.getElementById('viewSection').classList.add('hidden');
+        document
+          .getElementById('adminSection')
+          .classList.remove('hidden');
+        document
+          .getElementById('viewSection')
+          .classList.add('hidden');
 
         // Começa com duas linhas
         adicionarLinha();
