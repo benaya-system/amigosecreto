@@ -12,6 +12,7 @@
         --border: #000000;
         --btn-blue: #7fd3ff;    /* azul claro cartoon */
         --btn-yellow: #ffe66b;  /* amarelo cartoon  */
+        --row-bg: #f7f7f7;
       }
 
       /* Reset e base */
@@ -76,6 +77,7 @@
         max-width: 800px;
         width: 100%;
         margin: 0 auto;
+        text-align: center; /* centraliza textos gerais */
       }
 
       h1 {
@@ -91,49 +93,67 @@
         margin-bottom: 24px;
       }
 
-      /* Tabelas */
+      /* "Tabelas" como lista, sem cara de planilha */
       table {
         width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 12px;
+        border-collapse: separate;
+        border-spacing: 0 8px; /* espaço entre "linhas" */
+      }
+
+      thead {
+        display: none; /* esconde cabeçalhos pra não parecer planilha */
       }
 
       th,
       td {
-        border: 1px solid var(--border);
-        padding: 8px;
+        border: none;
+        padding: 0;
         font-size: 14px;
       }
 
-      th {
-        background: #f5f5f5;
+      /* Cada linha vira um "pill" centralizado */
+      #participantsBody tr,
+      #sendBody tr {
+        background: var(--row-bg);
+        border-radius: 999px;
       }
 
-      /* Inputs */
+      #participantsBody td,
+      #sendBody td {
+        padding: 6px 10px;
+        text-align: center;
+        vertical-align: middle;
+      }
+
+      /* Input de nome */
       input[type="text"] {
         width: 100%;
+        max-width: 280px;
         padding: 6px;
         border: 2px solid var(--border);
         background: var(--bg);
         color: var(--fg);
         font-family: inherit;
         font-size: 14px;
-        border-radius: 6px;
+        border-radius: 999px;
+        text-align: center;
+        margin: 4px auto;
+        display: block;
       }
 
       /* Botões estilo cartoon */
       .btn {
         display: inline-block;
-        padding: 10px 16px;
-        margin: 4px 2px;
+        padding: 8px 10px;
+        margin: 2px 2px;
         border: 3px solid var(--border);
         background: var(--btn-yellow);
         color: var(--fg);
         font-family: inherit;
-        font-size: 13px;
+        font-size: 12px;
         cursor: pointer;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.5px;
         border-radius: 999px;
         box-shadow: 3px 3px 0 #000000;
         transition: transform 0.08s ease,
@@ -146,10 +166,12 @@
       }
 
       .btn-small {
-        padding: 4px 10px;
-        font-size: 12px;
+        padding: 4px 8px;     /* menorzinho, tamanho "X" */
+        font-size: 11px;
+        min-width: 52px;
       }
 
+      /* Efeito de clique/hover cartoon */
       .btn:hover {
         transform: translate(-2px, -2px);
         box-shadow: 5px 5px 0 #000000;
@@ -173,6 +195,7 @@
         flex-wrap: wrap;
         gap: 8px;
         margin-bottom: 24px;
+        justify-content: center; /* centraliza */
       }
 
       .hidden {
@@ -249,12 +272,6 @@
           font-size: 24px;
         }
 
-        th,
-        td {
-          font-size: 13px;
-          padding: 6px;
-        }
-
         .view-card {
           padding: 20px;
           margin: 0 10px;
@@ -266,10 +283,6 @@
 
         .footer-placeholder {
           height: 70px;
-        }
-
-        .btn {
-          width: auto;
         }
       }
 
@@ -293,22 +306,6 @@
 
         p.descricao {
           font-size: 13px;
-        }
-
-        table {
-          display: block;
-          width: 100%;
-          overflow-x: auto;
-        }
-
-        .linha-botoes {
-          flex-direction: column;
-          align-items: stretch;
-        }
-
-        .btn {
-          width: 100%;
-          text-align: center;
         }
 
         .header-placeholder {
@@ -433,7 +430,8 @@
         const tdAcoes = document.createElement('td');
         const btnRemover = document.createElement('button');
         btnRemover.type = 'button';
-        btnRemover.textContent = 'x';
+        btnRemover.textContent = 'X';
+        btnRemover.title = 'Remover';
         btnRemover.className = 'btn btn-small';
         btnRemover.onclick = function () {
           tbody.removeChild(tr);
@@ -541,7 +539,8 @@
 
           const btnWA = document.createElement('button');
           btnWA.type = 'button';
-          btnWA.textContent = 'WhatsApp';
+          btnWA.textContent = 'WA';
+          btnWA.title = 'Enviar no WhatsApp';
           btnWA.className = 'btn btn-small btn-primary';
           btnWA.onclick = function () {
             enviarCodigoWhatsApp(item);
@@ -549,7 +548,8 @@
 
           const btnTG = document.createElement('button');
           btnTG.type = 'button';
-          btnTG.textContent = 'Telegram';
+          btnTG.textContent = 'TG';
+          btnTG.title = 'Enviar no Telegram';
           btnTG.className = 'btn btn-small';
           btnTG.onclick = function () {
             enviarCodigoTelegram(item);
@@ -557,7 +557,8 @@
 
           const btnCopy = document.createElement('button');
           btnCopy.type = 'button';
-          btnCopy.textContent = 'Copiar link';
+          btnCopy.textContent = 'CP';
+          btnCopy.title = 'Copiar mensagem';
           btnCopy.className = 'btn btn-small';
           btnCopy.onclick = function () {
             copiarMensagem(item);
