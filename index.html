@@ -13,42 +13,102 @@
         --btn-yellow: #ffe66b;
         --row-bg: #f7f7f7;
       }
+
       * { box-sizing: border-box; }
+
       body {
-        margin: 0; padding: 0;
-        background: var(--bg); color: var(--fg);
+        margin: 0;
+        padding: 0;
+        background: var(--bg);
+        color: var(--fg);
         font-family: "Comic Sans MS","Baloo 2","Fredoka",system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
       }
-      .container { min-height: 100vh; display: flex; flex-direction: column; }
-      header, footer { padding: 8px 12px; text-align: center; border: none; box-shadow: none; }
-      .header-placeholder, .footer-placeholder {
-        display:flex; align-items:center; justify-content:center; padding:0; border:none;
+
+      /* ===== Layout "blindado" ===== */
+      .container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
       }
-      .header-placeholder { height: 160px; }
-      .footer-placeholder { height: 90px; }
-      .header-placeholder img, .footer-placeholder img {
-        max-width:100%; max-height:100%; height:auto; width:auto; display:block;
+
+      header, footer {
+        padding: 8px 12px;
+        text-align: center;
+        border: none;
+        box-shadow: none;
+        flex-shrink: 0;          /* footer nunca encolhe por cima do main */
       }
+
       main {
-        padding: 16px; max-width: 800px; width: 100%;
-        margin: 0 auto; text-align: center;
+        flex: 1 0 auto;          /* ocupa o espaço central e empurra o footer */
+        padding: 16px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+        text-align: center;
+        position: relative;
+        z-index: 2;              /* garante main acima de qualquer bug */
       }
+
+      footer {
+        position: relative;
+        z-index: 1;
+      }
+
+      .header-placeholder, .footer-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border: none;
+      }
+
+      .header-placeholder { height: 160px; }
+
+      /* IMPORTANT: overflow hidden evita "área clicável" sobrando */
+      .footer-placeholder {
+        height: 90px;
+        overflow: hidden;
+      }
+
+      .header-placeholder img,
+      .footer-placeholder img {
+        max-width: 100%;
+        max-height: 100%;
+        height: auto;
+        width: auto;
+        display: block;
+      }
+
+      /* O link do footer só envolve o GIF e não vira um bloco gigante */
+      .footer-placeholder a {
+        display: inline-block;
+        line-height: 0;
+        pointer-events: auto;
+      }
+
       h1 { margin: 0 0 8px; font-size: 28px; letter-spacing: 1px; }
       p.descricao { font-size: 14px; margin: 0 0 24px; }
+
       table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
       thead { display: none; }
       th, td { border: none; padding: 0; font-size: 14px; }
+
       #participantsBody tr, #sendBody tr { background: var(--row-bg); border-radius: 999px; }
       #participantsBody td, #sendBody td { padding: 6px 10px; text-align: center; vertical-align: middle; }
+
       input[type="text"] {
-        width: 100%; max-width: 280px;
+        width: 100%;
+        max-width: 280px;
         padding: 6px;
         border: 2px solid var(--border);
         border-radius: 999px;
         text-align: center;
-        margin: 4px auto; display: block;
+        margin: 4px auto;
+        display: block;
         font-family: inherit;
       }
+
       .btn {
         display: inline-block;
         padding: 8px 10px;
@@ -65,22 +125,35 @@
         box-shadow: 3px 3px 0 #000;
         transition: transform .08s ease, box-shadow .08s ease, filter .08s ease;
       }
+
       .btn-primary { background: var(--btn-blue); }
       .btn-small { padding: 4px 8px; font-size: 11px; min-width: 52px; }
+
       .btn:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 #000; filter: brightness(1.05); }
       .btn:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 #000; }
       .btn:disabled { opacity:.5; cursor:not-allowed; filter:none; box-shadow: 3px 3px 0 #000; }
-      .linha-botoes { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom: 24px; }
+
+      .linha-botoes {
+        display:flex;
+        flex-wrap:wrap;
+        gap:8px;
+        justify-content:center;
+        margin-bottom: 24px;
+      }
+
       .hidden { display: none; }
+
       #status { font-size: 13px; min-height: 18px; margin-bottom: 8px; }
       #resultado { margin-top: 24px; }
       #resultado h2 { margin: 0 0 8px; font-size: 18px; }
+
       @media (max-width: 768px) {
         main { padding: 12px; }
         h1 { font-size: 24px; }
         .header-placeholder { height: 130px; }
         .footer-placeholder { height: 70px; }
       }
+
       @media (max-width: 480px) {
         main { padding: 10px; }
         h1 { font-size: 22px; }
@@ -92,6 +165,7 @@
       }
     </style>
   </head>
+
   <body>
     <div class="container">
       <header>
@@ -131,7 +205,7 @@
 
       <footer>
         <div class="footer-placeholder">
-          <a href="https://instagram.com/brunopatriots" target="_blank" >
+          <a href="https://instagram.com/brunopatriots" target="_blank" rel="noreferrer">
             <img src="foot2.gif" alt="footer" />
           </a>
         </div>
@@ -139,10 +213,7 @@
     </div>
 
     <script>
-      // === COLE AQUI O SEU WEB APP URL (Apps Script /exec) ===
       const APP_URL = 'https://script.google.com/macros/s/AKfycbz2lDkpVnBRLzc72iXHIgvDVLOBXnPLgXN4nIQGUhF-LpqR9XiqztdQ7X_G8eYPKHPJ3g/exec';
-
-      // Página de visualização (participante)
       const VIEW_URL = new URL('ver.html', window.location.href).toString().split('?')[0].split('#')[0];
 
       function adicionarLinha(nome = '') {
@@ -222,7 +293,6 @@
           tdNome.textContent = item.name;
 
           const tdAcoes = document.createElement('td');
-
           const texto = montarMensagem(item.name, item.token);
 
           const btnWA = document.createElement('button');
@@ -267,7 +337,7 @@
         btn.disabled = true;
 
         const names = participants.map(p => p.name).join('|');
-        const phones = new Array(participants.length).fill('').join('|'); // compat com API
+        const phones = new Array(participants.length).fill('').join('|');
 
         const url = APP_URL + '?mode=sortear&names=' + encodeURIComponent(names) + '&phones=' + encodeURIComponent(phones);
 
@@ -289,10 +359,8 @@
       }
 
       document.addEventListener('DOMContentLoaded', () => {
-        // começa com 2 linhas
         adicionarLinha();
         adicionarLinha();
-
         document.getElementById('addRowBtn').addEventListener('click', () => adicionarLinha());
         document.getElementById('sortearBtn').addEventListener('click', sortear);
       });
