@@ -1,147 +1,54 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <base target="_top">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Amigo Secreto</title>
     <style>
       :root {
         --bg: #ffffff;
         --fg: #000000;
         --border: #000000;
-        --btn-blue: #7fd3ff;    /* azul claro cartoon */
-        --btn-yellow: #ffe66b;  /* amarelo cartoon  */
+        --btn-blue: #7fd3ff;
+        --btn-yellow: #ffe66b;
         --row-bg: #f7f7f7;
       }
-
-      /* Reset e base */
-      * {
-        box-sizing: border-box;
-      }
-
+      * { box-sizing: border-box; }
       body {
-        margin: 0;
-        padding: 0;
-        background: var(--bg);
-        color: var(--fg);
-        font-family: "Comic Sans MS", "Baloo 2", "Fredoka",
-          system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        margin: 0; padding: 0;
+        background: var(--bg); color: var(--fg);
+        font-family: "Comic Sans MS","Baloo 2","Fredoka",system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
       }
-
-      /* Layout geral */
-      .container {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
+      .container { min-height: 100vh; display: flex; flex-direction: column; }
+      header, footer { padding: 8px 12px; text-align: center; border: none; box-shadow: none; }
+      .header-placeholder, .footer-placeholder {
+        display:flex; align-items:center; justify-content:center; padding:0; border:none;
       }
-
-      /* HEADER e FOOTER */
-      header,
-      footer {
-        padding: 8px 12px;
-        text-align: center;
-        border: none;
-        box-shadow: none;
+      .header-placeholder { height: 160px; }
+      .footer-placeholder { height: 90px; }
+      .header-placeholder img, .footer-placeholder img {
+        max-width:100%; max-height:100%; height:auto; width:auto; display:block;
       }
-
-      .header-placeholder,
-      .footer-placeholder {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
-        padding: 0;
-      }
-
-      .header-placeholder {
-        height: 160px;
-      }
-
-      .footer-placeholder {
-        height: 90px;
-      }
-
-      .header-placeholder img,
-      .footer-placeholder img {
-        max-width: 100%;
-        max-height: 100%;
-        height: auto;
-        width: auto;
-        display: block;
-      }
-
-      /* Conteúdo principal */
       main {
-        padding: 16px;
-        max-width: 800px;
-        width: 100%;
-        margin: 0 auto;
-        text-align: center; /* centraliza textos gerais */
+        padding: 16px; max-width: 800px; width: 100%;
+        margin: 0 auto; text-align: center;
       }
-
-      h1 {
-        text-align: center;
-        margin-bottom: 8px;
-        font-size: 28px;
-        letter-spacing: 1px;
-      }
-
-      p.descricao {
-        text-align: center;
-        font-size: 14px;
-        margin-bottom: 24px;
-      }
-
-      /* "Tabelas" como lista, sem cara de planilha */
-      table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0 8px; /* espaço entre "linhas" */
-      }
-
-      thead {
-        display: none; /* esconde cabeçalhos pra não parecer planilha */
-      }
-
-      th,
-      td {
-        border: none;
-        padding: 0;
-        font-size: 14px;
-      }
-
-      /* Cada linha vira um "pill" centralizado */
-      #participantsBody tr,
-      #sendBody tr {
-        background: var(--row-bg);
-        border-radius: 999px;
-      }
-
-      #participantsBody td,
-      #sendBody td {
-        padding: 6px 10px;
-        text-align: center;
-        vertical-align: middle;
-      }
-
-      /* Input de nome */
+      h1 { margin: 0 0 8px; font-size: 28px; letter-spacing: 1px; }
+      p.descricao { font-size: 14px; margin: 0 0 24px; }
+      table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+      thead { display: none; }
+      th, td { border: none; padding: 0; font-size: 14px; }
+      #participantsBody tr, #sendBody tr { background: var(--row-bg); border-radius: 999px; }
+      #participantsBody td, #sendBody td { padding: 6px 10px; text-align: center; vertical-align: middle; }
       input[type="text"] {
-        width: 100%;
-        max-width: 280px;
+        width: 100%; max-width: 280px;
         padding: 6px;
         border: 2px solid var(--border);
-        background: var(--bg);
-        color: var(--fg);
-        font-family: inherit;
-        font-size: 14px;
         border-radius: 999px;
         text-align: center;
-        margin: 4px auto;
-        display: block;
+        margin: 4px auto; display: block;
+        font-family: inherit;
       }
-
-      /* Botões estilo cartoon */
       .btn {
         display: inline-block;
         padding: 8px 10px;
@@ -155,166 +62,33 @@
         text-transform: uppercase;
         letter-spacing: 0.5px;
         border-radius: 999px;
-        box-shadow: 3px 3px 0 #000000;
-        transition: transform 0.08s ease,
-          box-shadow 0.08s ease,
-          filter 0.08s ease;
+        box-shadow: 3px 3px 0 #000;
+        transition: transform .08s ease, box-shadow .08s ease, filter .08s ease;
       }
-
-      .btn-primary {
-        background: var(--btn-blue);
-      }
-
-      .btn-small {
-        padding: 4px 8px;     /* menorzinho, tamanho "X" */
-        font-size: 11px;
-        min-width: 52px;
-      }
-
-      /* Efeito de clique/hover cartoon */
-      .btn:hover {
-        transform: translate(-2px, -2px);
-        box-shadow: 5px 5px 0 #000000;
-        filter: brightness(1.05);
-      }
-
-      .btn:active {
-        transform: translate(1px, 1px);
-        box-shadow: 1px 1px 0 #000000;
-      }
-
-      .btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        filter: none;
-        box-shadow: 3px 3px 0 #000000;
-      }
-
-      .linha-botoes {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 24px;
-        justify-content: center; /* centraliza */
-      }
-
-      .hidden {
-        display: none;
-      }
-
-      #status {
-        font-size: 13px;
-        min-height: 18px;
-        margin-bottom: 8px;
-      }
-
-      /* Resultado do sorteio */
-      #resultado {
-        margin-top: 24px;
-      }
-
-      #resultado h2 {
-        margin-bottom: 8px;
-        font-size: 18px;
-        text-align: center;
-      }
-
-      /* Seção de visualização (quem recebeu o link) */
-      #viewSection {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 50vh;
-      }
-
-      .view-card {
-        border: 3px solid #000000;
-        padding: 24px 32px;
-        max-width: 520px;
-        width: calc(100% - 32px);
-        margin: 0 auto;
-        text-align: center;
-        border-radius: 16px;
-        box-shadow: 4px 4px 0 #000000;
-      }
-
-      .view-card h1 {
-        margin-top: 0;
-        margin-bottom: 16px;
-        font-size: 24px;
-      }
-
-      .view-card p {
-        margin: 8px 0;
-        font-size: 15px;
-      }
-
-      .view-nome {
-        font-size: 22px;
-        font-weight: bold;
-        margin-top: 16px;
-        margin-bottom: 8px;
-      }
-
-      .observacao {
-        margin-top: 16px;
-        font-size: 12px;
-        color: #555555;
-      }
-
-      /* Responsivo */
+      .btn-primary { background: var(--btn-blue); }
+      .btn-small { padding: 4px 8px; font-size: 11px; min-width: 52px; }
+      .btn:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 #000; filter: brightness(1.05); }
+      .btn:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 #000; }
+      .btn:disabled { opacity:.5; cursor:not-allowed; filter:none; box-shadow: 3px 3px 0 #000; }
+      .linha-botoes { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom: 24px; }
+      .hidden { display: none; }
+      #status { font-size: 13px; min-height: 18px; margin-bottom: 8px; }
+      #resultado { margin-top: 24px; }
+      #resultado h2 { margin: 0 0 8px; font-size: 18px; }
       @media (max-width: 768px) {
-        main {
-          padding: 12px;
-        }
-
-        h1 {
-          font-size: 24px;
-        }
-
-        .view-card {
-          padding: 20px;
-          margin: 0 10px;
-        }
-
-        .header-placeholder {
-          height: 130px;
-        }
-
-        .footer-placeholder {
-          height: 70px;
-        }
+        main { padding: 12px; }
+        h1 { font-size: 24px; }
+        .header-placeholder { height: 130px; }
+        .footer-placeholder { height: 70px; }
       }
-
       @media (max-width: 480px) {
-        .view-card {
-          padding: 20px 16px;
-          width: calc(100% - 24px);
-        }
-
-        h1 {
-          font-size: 22px;
-        }
-
-        .view-nome {
-          font-size: 22px;
-        }
-
-        main {
-          padding: 10px;
-        }
-
-        p.descricao {
-          font-size: 13px;
-        }
-
-        .header-placeholder {
-          height: 110px;
-        }
-
-        .footer-placeholder {
-          height: 60px;
-        }
+        main { padding: 10px; }
+        h1 { font-size: 22px; }
+        p.descricao { font-size: 13px; }
+        .header-placeholder { height: 110px; }
+        .footer-placeholder { height: 60px; }
+        .linha-botoes { flex-direction: column; align-items: stretch; }
+        .btn { width: 100%; }
       }
     </style>
   </head>
@@ -322,214 +96,126 @@
     <div class="container">
       <header>
         <div class="header-placeholder">
-          <img src="familyguys.png">
+          <img src="familyguys.png" alt="header" />
         </div>
       </header>
 
       <main>
-        <!-- Seção ADMIN (cadastro e sorteio) -->
-        <div id="adminSection">
-          <h1>Amigo Secreto</h1>
-          <p class="descricao">
-            Digite apenas os nomes, clique em "Sortear amigo secreto" e depois
-            use os botões para enviar o link por WhatsApp, Telegram ou copiar a mensagem.
-          </p>
+        <h1>Amigo Secreto</h1>
+        <p class="descricao">
+          Digite apenas os nomes, clique em <strong>Sortear</strong> e depois use WA / TG / CP para enviar.
+        </p>
 
-          <div id="status"></div>
+        <div id="status"></div>
 
-          <table id="participantsTable">
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody id="participantsBody">
-              <!-- Linhas adicionadas via JavaScript -->
-            </tbody>
-          </table>
+        <table>
+          <tbody id="participantsBody"></tbody>
+        </table>
 
-          <div class="linha-botoes">
-            <button type="button" class="btn" id="addRowBtn">
-              + Adicionar pessoa
-            </button>
-            <button type="button" class="btn btn-primary" id="sortearBtn">
-              Sortear amigo secreto
-            </button>
-          </div>
-
-          <div id="resultado" class="hidden">
-            <h2>Envio de links</h2>
-            <p style="font-size: 13px; text-align: center; margin-bottom: 8px;">
-              Use os botões ao lado de cada nome para abrir WhatsApp, Telegram
-              ou copiar a mensagem com o link.
-            </p>
-            <table>
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody id="sendBody">
-                <!-- Preenchido após o sorteio -->
-              </tbody>
-            </table>
-          </div>
+        <div class="linha-botoes">
+          <button type="button" class="btn" id="addRowBtn">+ Adicionar pessoa</button>
+          <button type="button" class="btn btn-primary" id="sortearBtn">Sortear amigo secreto</button>
         </div>
 
-        <!-- Seção VISUALIZAÇÃO (quem recebeu o link) -->
-        <div id="viewSection" class="hidden">
-          <div class="view-card">
-            <h1>Amigo Secreto</h1>
-            <p id="viewStatus">Carregando seu amigo secreto...</p>
+        <div id="resultado" class="hidden">
+          <h2>Envio de links</h2>
+          <p style="font-size:13px; margin: 0 0 8px;">
+            Botões pequenos lado a lado: <strong>WA</strong> WhatsApp, <strong>TG</strong> Telegram, <strong>CP</strong> copiar mensagem.
+          </p>
 
-            <div id="viewContent" class="hidden">
-              <p>Olá, <strong id="viewGiver"></strong>!</p>
-              <p>O seu amigo secreto é:</p>
-              <p class="view-nome" id="viewName"></p>
-              <p class="observacao">
-                Guarde este nome em segredo 😉<br>
-                (Se você recebeu este link, ele é só seu.)
-              </p>
-            </div>
-          </div>
+          <table>
+            <tbody id="sendBody"></tbody>
+          </table>
         </div>
       </main>
 
       <footer>
         <div class="footer-placeholder">
-          <a href="https://instagram.com/brunopatriots" target="_blank">
-            <img src="foot2.gif" alt="Reset">
+          <a href="https://instagram.com/brunopatriots" target="_blank" rel="noreferrer">
+            <img src="foot2.gif" alt="footer" />
           </a>
         </div>
       </footer>
     </div>
 
     <script>
-      // URL do Apps Script (sua API)
-      const APP_URL =
-        'https://script.google.com/macros/s/AKfycbxZYHhMONby1iKjlAWV48EL9WD8W1Zz3vAkR2YYOBl_QNnIh3BZqAPV7qi_sREkH9C-Nw/exec';
+      // === COLE AQUI O SEU WEB APP URL (Apps Script /exec) ===
+      const APP_URL = 'https://script.google.com/macros/s/AKfycbz2lDkpVnBRLzc72iXHIgvDVLOBXnPLgXN4nIQGUhF-LpqR9XiqztdQ7X_G8eYPKHPJ3g/exec';
 
-      // URL da própria página (pra gerar o link)
-      const SITE_URL = window.location.origin + window.location.pathname;
-
-      let ultimoResultado = [];
+      // Página de visualização (participante)
+      const VIEW_URL = new URL('ver.html', window.location.href).toString().split('?')[0].split('#')[0];
 
       function adicionarLinha(nome = '') {
         const tbody = document.getElementById('participantsBody');
         const tr = document.createElement('tr');
 
         const tdNome = document.createElement('td');
-        const inputNome = document.createElement('input');
-        inputNome.type = 'text';
-        inputNome.placeholder = 'Nome';
-        inputNome.value = nome;
-        tdNome.appendChild(inputNome);
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.placeholder = 'Nome';
+        input.value = nome;
+        tdNome.appendChild(input);
 
         const tdAcoes = document.createElement('td');
-        const btnRemover = document.createElement('button');
-        btnRemover.type = 'button';
-        btnRemover.textContent = 'X';
-        btnRemover.title = 'Remover';
-        btnRemover.className = 'btn btn-small';
-        btnRemover.onclick = function () {
-          tbody.removeChild(tr);
-        };
-        tdAcoes.appendChild(btnRemover);
+        const btnX = document.createElement('button');
+        btnX.type = 'button';
+        btnX.textContent = 'X';
+        btnX.className = 'btn btn-small';
+        btnX.onclick = () => tbody.removeChild(tr);
+        tdAcoes.appendChild(btnX);
 
         tr.appendChild(tdNome);
         tr.appendChild(tdAcoes);
-
         tbody.appendChild(tr);
       }
 
       function coletarParticipantes() {
-        const linhas = document.querySelectorAll('#participantsBody tr');
-        const participantes = [];
-
-        linhas.forEach((linha) => {
-          const inputNome = linha.querySelector('td:nth-child(1) input');
-          if (!inputNome) return;
-          const nome = inputNome.value.trim();
-          if (nome) {
-            participantes.push({ name: nome });
-          }
+        const rows = document.querySelectorAll('#participantsBody tr');
+        const participants = [];
+        rows.forEach(r => {
+          const input = r.querySelector('input');
+          const name = (input?.value || '').trim();
+          if (name) participants.push({ name });
         });
-
-        return participantes;
+        return participants;
       }
 
-      function mostrarStatus(msg, erro = false) {
+      function mostrarStatus(msg, erro=false) {
         const el = document.getElementById('status');
         el.textContent = msg || '';
         el.style.color = erro ? 'red' : 'black';
       }
 
-      function sortear() {
-        const participantes = coletarParticipantes();
-        if (participantes.length < 2) {
-          mostrarStatus(
-            'Adicione pelo menos 2 participantes com nome.',
-            true
-          );
-          return;
-        }
-
-        mostrarStatus('Sorteando... aguarde.');
-        document.getElementById('sortearBtn').disabled = true;
-
-        const names = participantes.map((p) => p.name).join('|');
-        // Phones vazios só pra manter o formato esperado pela API
-        const phones = new Array(participantes.length).fill('').join('|');
-
-        const url =
-          APP_URL +
-          '?mode=sortear&names=' +
-          encodeURIComponent(names) +
-          '&phones=' +
-          encodeURIComponent(phones);
-
-        fetch(url)
-          .then((r) => r.json())
-          .then((data) => {
-            document.getElementById('sortearBtn').disabled = false;
-            if (!data.ok) {
-              mostrarStatus(
-                'Erro ao sortear: ' + (data.error || 'desconhecido'),
-                true
-              );
-              return;
-            }
-            ultimoResultado = data.data || [];
-            if (!ultimoResultado.length) {
-              mostrarStatus(
-                'Sorteio não retornou dados. Tente novamente.',
-                true
-              );
-              return;
-            }
-            preencherTabelaEnvio(ultimoResultado);
-            mostrarStatus(
-              'Sorteio realizado com sucesso! Agora envie os links.',
-              false
-            );
-          })
-          .catch((err) => {
-            document.getElementById('sortearBtn').disabled = false;
-            mostrarStatus(
-              'Erro ao conectar com o servidor: ' + err,
-              true
-            );
-          });
+      function montarMensagem(name, token) {
+        const link = VIEW_URL + '?t=' + encodeURIComponent(token);
+        return 'Olá ' + name + ', clique no link abaixo pra saber quem você tirou no amigo secreto:\n' + link;
       }
 
-      function preencherTabelaEnvio(dados) {
-        const divResultado = document.getElementById('resultado');
+      function abrirWhatsApp(texto) {
+        window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
+      }
+
+      function abrirTelegram(texto, token) {
+        const link = VIEW_URL + '?t=' + encodeURIComponent(token);
+        const url = 'https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(texto);
+        window.open(url, '_blank');
+      }
+
+      function copiarTexto(texto) {
+        if (navigator.clipboard?.writeText) {
+          navigator.clipboard.writeText(texto)
+            .then(() => alert('Mensagem copiada!'))
+            .catch(() => window.prompt('Copie a mensagem:', texto));
+        } else {
+          window.prompt('Copie a mensagem:', texto);
+        }
+      }
+
+      function preencherEnvio(data) {
         const tbody = document.getElementById('sendBody');
         tbody.innerHTML = '';
 
-        dados.forEach((item) => {
+        data.forEach(item => {
           const tr = document.createElement('tr');
 
           const tdNome = document.createElement('td');
@@ -537,174 +223,78 @@
 
           const tdAcoes = document.createElement('td');
 
+          const texto = montarMensagem(item.name, item.token);
+
           const btnWA = document.createElement('button');
-          btnWA.type = 'button';
-          btnWA.textContent = 'WA';
-          btnWA.title = 'Enviar no WhatsApp';
           btnWA.className = 'btn btn-small btn-primary';
-          btnWA.onclick = function () {
-            enviarCodigoWhatsApp(item);
-          };
+          btnWA.textContent = 'WA';
+          btnWA.title = 'WhatsApp';
+          btnWA.onclick = () => abrirWhatsApp(texto);
 
           const btnTG = document.createElement('button');
-          btnTG.type = 'button';
-          btnTG.textContent = 'TG';
-          btnTG.title = 'Enviar no Telegram';
           btnTG.className = 'btn btn-small';
-          btnTG.onclick = function () {
-            enviarCodigoTelegram(item);
-          };
+          btnTG.textContent = 'TG';
+          btnTG.title = 'Telegram';
+          btnTG.onclick = () => abrirTelegram(texto, item.token);
 
-          const btnCopy = document.createElement('button');
-          btnCopy.type = 'button';
-          btnCopy.textContent = 'CP';
-          btnCopy.title = 'Copiar mensagem';
-          btnCopy.className = 'btn btn-small';
-          btnCopy.onclick = function () {
-            copiarMensagem(item);
-          };
+          const btnCP = document.createElement('button');
+          btnCP.className = 'btn btn-small';
+          btnCP.textContent = 'CP';
+          btnCP.title = 'Copiar';
+          btnCP.onclick = () => copiarTexto(texto);
 
           tdAcoes.appendChild(btnWA);
           tdAcoes.appendChild(btnTG);
-          tdAcoes.appendChild(btnCopy);
+          tdAcoes.appendChild(btnCP);
 
           tr.appendChild(tdNome);
           tr.appendChild(tdAcoes);
-
           tbody.appendChild(tr);
         });
 
-        divResultado.classList.remove('hidden');
+        document.getElementById('resultado').classList.remove('hidden');
       }
 
-      function montarMensagem(item) {
-        const link = SITE_URL + '?t=' + encodeURIComponent(item.token);
-        return (
-          'Olá ' +
-          item.name +
-          ', clique no link abaixo pra saber quem você tirou no amigo secreto:\n' +
-          link
-        );
-      }
-
-      function enviarCodigoWhatsApp(item) {
-        const mensagem = montarMensagem(item);
-        const url =
-          'https://wa.me/?text=' + encodeURIComponent(mensagem);
-        window.open(url, '_blank');
-      }
-
-      function enviarCodigoTelegram(item) {
-        const link = SITE_URL + '?t=' + encodeURIComponent(item.token);
-        const texto =
-          'Olá ' +
-          item.name +
-          ', clique no link abaixo pra saber quem você tirou no amigo secreto:';
-        const url =
-          'https://t.me/share/url?url=' +
-          encodeURIComponent(link) +
-          '&text=' +
-          encodeURIComponent(texto);
-        window.open(url, '_blank');
-      }
-
-      function copiarMensagem(item) {
-        const mensagem = montarMensagem(item);
-
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard
-            .writeText(mensagem)
-            .then(() => {
-              alert('Mensagem copiada para a área de transferência!');
-            })
-            .catch(() => {
-              fallbackPrompt(mensagem);
-            });
-        } else {
-          fallbackPrompt(mensagem);
+      function sortear() {
+        const participants = coletarParticipantes();
+        if (participants.length < 2) {
+          mostrarStatus('Adicione pelo menos 2 nomes.', true);
+          return;
         }
-      }
 
-      function fallbackPrompt(texto) {
-        window.prompt(
-          'Copie a mensagem abaixo (Ctrl+C / Command+C):',
-          texto
-        );
-      }
+        mostrarStatus('Sorteando... aguarde.');
+        const btn = document.getElementById('sortearBtn');
+        btn.disabled = true;
 
-      // ====== MODO VISUALIZAÇÃO (quem recebeu o link) ======
+        const names = participants.map(p => p.name).join('|');
+        const phones = new Array(participants.length).fill('').join('|'); // compat com API
 
-      function entrarModoVisualizacao(token) {
-        document
-          .getElementById('adminSection')
-          .classList.add('hidden');
-        document
-          .getElementById('viewSection')
-          .classList.remove('hidden');
-
-        const statusEl = document.getElementById('viewStatus');
-        const contentEl = document.getElementById('viewContent');
-        const giverEl = document.getElementById('viewGiver');
-        const nameEl = document.getElementById('viewName');
-
-        statusEl.textContent = 'Carregando seu amigo secreto...';
-        contentEl.classList.add('hidden');
-
-        const url = APP_URL + '?t=' + encodeURIComponent(token);
+        const url = APP_URL + '?mode=sortear&names=' + encodeURIComponent(names) + '&phones=' + encodeURIComponent(phones);
 
         fetch(url)
-          .then((r) => r.json())
-          .then((data) => {
-            if (!data.ok) {
-              statusEl.textContent =
-                'Ops! Não encontramos um amigo secreto para este link.';
+          .then(r => r.json())
+          .then(resp => {
+            btn.disabled = false;
+            if (!resp.ok) {
+              mostrarStatus('Erro: ' + (resp.error || 'desconhecido'), true);
               return;
             }
-            statusEl.textContent = '';
-            giverEl.textContent = data.giverName || '';
-            nameEl.textContent = data.friendName || '???';
-            contentEl.classList.remove('hidden');
+            preencherEnvio(resp.data || []);
+            mostrarStatus('Sorteio pronto! Agora envie os links.');
           })
-          .catch(() => {
-            statusEl.textContent =
-              'Erro ao carregar informações. Tente novamente mais tarde.';
+          .catch(err => {
+            btn.disabled = false;
+            mostrarStatus('Erro de conexão: ' + err, true);
           });
       }
 
-      function entrarModoAdmin() {
-        document
-          .getElementById('adminSection')
-          .classList.remove('hidden');
-        document
-          .getElementById('viewSection')
-          .classList.add('hidden');
-
-        // Começa com duas linhas
+      document.addEventListener('DOMContentLoaded', () => {
+        // começa com 2 linhas
         adicionarLinha();
         adicionarLinha();
-      }
 
-      // ====== Inicialização ======
-      document.addEventListener('DOMContentLoaded', function () {
-        const params = new URLSearchParams(window.location.search);
-        const token = params.get('t');
-
-        if (token) {
-          entrarModoVisualizacao(token);
-        } else {
-          entrarModoAdmin();
-        }
-
-        const addBtn = document.getElementById('addRowBtn');
-        if (addBtn) {
-          addBtn.addEventListener('click', function () {
-            adicionarLinha();
-          });
-        }
-        const sortearBtn = document.getElementById('sortearBtn');
-        if (sortearBtn) {
-          sortearBtn.addEventListener('click', sortear);
-        }
+        document.getElementById('addRowBtn').addEventListener('click', () => adicionarLinha());
+        document.getElementById('sortearBtn').addEventListener('click', sortear);
       });
     </script>
   </body>
