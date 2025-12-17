@@ -193,7 +193,7 @@
           <h1>Amigo Secreto</h1>
 
           <p class="big-warning">
-            ⚠️ ATENÇÃO: o nome só poderá ser revelado neste dispositivo.<br/>
+            ⚠️ ATENÇÃO ⚠️: o nome só poderá ser revelado neste dispositivo.<br/>
             Não abra se você não for a pessoa indicada abaixo.
           </p>
 
@@ -210,13 +210,13 @@
             </div>
 
             <button class="btn btn-primary" id="revealBtn" type="button">
-              Revelar meu amigo secreto 🎁
+              Revelar meu amigo secreto 
             </button>
 
             <div id="result" class="hidden">
               <p>O seu amigo secreto é:</p>
               <p class="nome" id="friendName"></p>
-              <p class="observacao">Guarde este nome em segredo 😉</p>
+              <p class="observacao">Guarde este nome em segredo ;) </p>
             </div>
           </div>
         </div>
@@ -318,7 +318,7 @@
 
               if (!claim.ok){
                 setStatus('⚠️ Esse link já foi visualizado em outro dispositivo. Converse com o organizador.', true);
-                revealBtn.textContent = 'Revelar meu amigo secreto 🎁';
+                revealBtn.textContent = 'Revelar meu amigo secreto';
                 revealBtn.disabled = true;
                 return;
               }
@@ -329,7 +329,7 @@
 
               if (!rev.ok){
                 setStatus('⚠️ Esse link já foi visualizado em outro dispositivo. Converse com o organizador.', true);
-                revealBtn.textContent = 'Revelar meu amigo secreto 🎁';
+                revealBtn.textContent = 'Revelar meu amigo secreto';
                 revealBtn.disabled = true;
                 return;
               }
@@ -338,10 +338,10 @@
               giftBox.classList.add('open');
               friendNameEl.textContent = rev.friendName || '???';
               result.classList.remove('hidden');
-              revealBtn.textContent = 'Revelado ✅';
+              revealBtn.textContent = 'Revelado ✓';
             }catch(e){
               setStatus('Erro ao revelar. Tente novamente mais tarde.', true);
-              revealBtn.textContent = 'Revelar meu amigo secreto 🎁';
+              revealBtn.textContent = 'Revelar meu amigo secreto';
               revealBtn.disabled = false;
             }
           };
