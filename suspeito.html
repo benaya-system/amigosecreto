@@ -1,0 +1,1117 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Detetive Helper (Local)</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    header {
+      position: sticky; top: 0; z-index: 5;
+      padding: 12px 14px;
+      background: rgba(20,20,20,0.92);
+      color: #fff;
+      backdrop-filter: blur(6px);
+      display: flex; align-items: center; gap: 10px; justify-content: space-between;
+    }
+    header h1 { font-size: 15px; margin: 0; font-weight: 700; letter-spacing: .2px; }
+    header .btn { border: 1px solid rgba(255,255,255,0.25); background: rgba(255,255,255,0.08); color:#fff; }
+    .wrap { padding: 12px 14px 70px; max-width: 1100px; margin: 0 auto; }
+    .card { border: 1px solid rgba(120,120,120,0.35); border-radius: 14px; padding: 12px; margin: 10px 0; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .row > * { flex: 1 1 220px; }
+    label { display:block; font-size: 12px; opacity:.85; margin: 0 0 4px; }
+    input, select {
+      width: 100%;
+      padding: 10px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(120,120,120,0.45);
+      background: transparent;
+      color: inherit;
+      outline: none;
+    }
+    .btn {
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(120,120,120,0.55);
+      background: rgba(120,120,120,0.12);
+      color: inherit;
+      font-weight: 650;
+      cursor: pointer;
+      user-select: none;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn.primary { border-color: rgba(100,160,255,0.8); background: rgba(100,160,255,0.18); }
+    .btn.danger { border-color: rgba(255,90,90,0.85); background: rgba(255,90,90,0.14); }
+    .btn.small { padding: 6px 10px; border-radius: 10px; font-size: 12px; }
+    .pill {
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 6px 10px; border-radius: 999px;
+      border:1px solid rgba(120,120,120,0.45);
+      background: rgba(120,120,120,0.08);
+      font-size: 12px;
+      margin: 4px 6px 0 0;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .pill.selected {
+      border-color: rgba(100,160,255,0.9);
+      background: rgba(100,160,255,0.22);
+    }
+    .pill.owned {
+      border-color: rgba(110,240,160,0.9);
+      background: rgba(110,240,160,0.18);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    @media (min-width: 860px) {
+      .grid { grid-template-columns: 1.2fr 0.8fr; }
+    }
+    .colSplit {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    @media (min-width: 860px) {
+      .colSplit { grid-template-columns: 1fr 1fr; }
+    }
+    .muted { opacity: .8; font-size: 12px; }
+    .kpi { font-weight: 800; font-size: 16px; margin: 6px 0 2px; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    .hr { height:1px; background: rgba(120,120,120,0.25); margin: 10px 0; }
+    .list { display:flex; flex-wrap: wrap; gap: 6px; }
+    .tag { font-size: 12px; padding: 4px 8px; border-radius: 999px; border: 1px solid rgba(120,120,120,0.4); background: rgba(120,120,120,0.08); }
+    .tag.ok { border-color: rgba(110,240,160,0.75); background: rgba(110,240,160,0.12); }
+    .tag.warn { border-color: rgba(255,200,80,0.85); background: rgba(255,200,80,0.12); }
+    .tag.bad { border-color: rgba(255,90,90,0.85); background: rgba(255,90,90,0.12); }
+    .tableLike { display: grid; grid-template-columns: 1fr; gap: 8px; }
+    .itemBox { border: 1px solid rgba(120,120,120,0.35); border-radius: 12px; padding: 10px; }
+    .itemBox h3 { margin: 0 0 8px; font-size: 13px; }
+    .historyItem { border: 1px solid rgba(120,120,120,0.3); border-radius: 12px; padding: 10px; }
+    .historyItem .top { display:flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .historyItem .top b { font-size: 13px; }
+    .stickyBottom {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: rgba(20,20,20,0.92);
+      color: #fff;
+      backdrop-filter: blur(6px);
+      padding: 10px 14px;
+      display: flex; gap: 10px; justify-content: center;
+      border-top: 1px solid rgba(255,255,255,0.15);
+    }
+    .stickyBottom .btn { flex: 1 1 auto; max-width: 520px; }
+    details summary { cursor: pointer; font-weight: 700; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>🕵️ Detetive Helper (salvo no navegador)</h1>
+  <button class="btn danger" id="btnReset">Reset (novo jogo)</button>
+</header>
+
+<div class="wrap">
+
+  <div class="card">
+    <div class="row">
+      <div>
+        <label>Adicionar jogador (ordem importa)</label>
+        <input id="playerName" placeholder="Ex.: João, Maria, Eu..." />
+      </div>
+      <div style="display:flex; align-items: end; gap: 10px;">
+        <button class="btn primary" id="btnAddPlayer" style="flex:1;">+ Adicionar</button>
+        <button class="btn" id="btnAddMe" title="Cria um jogador chamado 'Eu' se ainda não existir">+ Eu</button>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="row">
+      <div>
+        <div class="muted">Jogadores (clique nas setas para ajustar a ordem):</div>
+        <div id="playersList" class="tableLike" style="margin-top:8px;"></div>
+      </div>
+      <div>
+        <div class="muted">Tamanho da mão (opcional, ajuda a deduzir):</div>
+        <div class="muted" style="margin-top:6px;">Se você souber quantas cartas cada jogador recebeu, preencha. Se não, deixe em branco.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- Left: Cards + Round -->
+    <div class="card">
+      <div class="colSplit">
+        <div class="itemBox">
+          <h3>1) Palpite: Pessoa</h3>
+          <div class="list" id="suspectsPeople"></div>
+        </div>
+        <div class="itemBox">
+          <h3>2) Palpite: Arma</h3>
+          <div class="list" id="suspectsWeapons"></div>
+        </div>
+      </div>
+
+      <div class="itemBox" style="margin-top:10px;">
+        <h3>3) Palpite: Lugar</h3>
+        <div class="list" id="suspectsPlaces"></div>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="row">
+        <div>
+          <label>Quem fez o palpite?</label>
+          <select id="selAsker"></select>
+          <div class="muted" style="margin-top:6px;">
+            Regra usada: na ordem dos jogadores, todos após o “asker” vão sendo perguntados até alguém mostrar carta.
+            Quem está “entre” o asker e quem mostrou é marcado como “não tem nenhuma das 3”.
+          </div>
+        </div>
+        <div>
+          <label>Quem mostrou uma carta?</label>
+          <select id="selResponder"></select>
+          <div class="muted" style="margin-top:6px;">
+            Se ninguém mostrou, selecione <span class="mono">Ninguém</span>.
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:10px;">
+        <div>
+          <label>Qual carta foi mostrada? (opcional)</label>
+          <select id="selShownCard"></select>
+          <div class="muted" style="margin-top:6px;">
+            Se você viu exatamente qual carta foi mostrada, selecione aqui. Senão, deixe como “Não sei”.
+          </div>
+        </div>
+        <div style="display:flex; align-items:end; gap:10px;">
+          <button class="btn primary" id="btnSaveRound" style="flex:1;">Registrar rodada</button>
+          <button class="btn" id="btnUndoRound">Desfazer última</button>
+        </div>
+      </div>
+
+      <details style="margin-top:12px;">
+        <summary>🧾 Histórico de rodadas</summary>
+        <div id="roundHistory" style="margin-top:10px;"></div>
+      </details>
+
+      <details style="margin-top:12px;">
+        <summary>🧩 Minhas cartas (opcional, acelera MUITO)</summary>
+        <div class="muted" style="margin-top:8px;">
+          Marque aqui as cartas que você tem (se você adicionou um jogador “Eu”). Essas cartas viram “certeza”.
+        </div>
+        <div class="hr"></div>
+        <div class="itemBox">
+          <h3>Pessoas (eu tenho)</h3>
+          <div class="list" id="ownPeople"></div>
+        </div>
+        <div class="itemBox" style="margin-top:10px;">
+          <h3>Armas (eu tenho)</h3>
+          <div class="list" id="ownWeapons"></div>
+        </div>
+        <div class="itemBox" style="margin-top:10px;">
+          <h3>Lugares (eu tenho)</h3>
+          <div class="list" id="ownPlaces"></div>
+        </div>
+      </details>
+    </div>
+
+    <!-- Right: Deduction -->
+    <div class="card">
+      <div class="kpi">Dedução (atualiza sozinha)</div>
+      <div class="muted">Tudo fica salvo no <span class="mono">localStorage</span> do navegador.</div>
+
+      <div class="hr"></div>
+
+      <div id="solutionBox"></div>
+
+      <div class="hr"></div>
+
+      <details open>
+        <summary>📌 Cartas certas / possíveis por jogador</summary>
+        <div id="perPlayerBox" style="margin-top:10px;"></div>
+      </details>
+
+      <div class="hr"></div>
+
+      <details>
+        <summary>⚙️ Como a lógica funciona (bem resumido)</summary>
+        <div class="muted" style="margin-top:8px; line-height: 1.4;">
+          - Cada carta pertence a exatamente 1 “dono”: um jogador ou o Envelope.<br/>
+          - Cada rodada cria restrições: quem mostrou tem ≥ 1 das 3; quem foi “passado” não tem nenhuma das 3.<br/>
+          - Se você informar qual carta foi mostrada, vira certeza direta.<br/>
+          - O algoritmo faz propagação + busca com poda para encontrar soluções consistentes. Se o Envelope ficar único, você ganhou.
+        </div>
+      </details>
+    </div>
+
+  </div>
+</div>
+
+<div class="stickyBottom">
+  <button class="btn" id="btnRecompute">Recalcular agora</button>
+</div>
+
+<script>
+(function(){
+  // ======= Cartas (listas) =======
+  const PEOPLE = ["Motorista","Empregada","Mordomo","Cozinheiro","Esposa","Jardineiro","Vizinho"];
+  const WEAPONS = ["Veneno","Abajur","Revólver","Faca","Tesoura de poda","Chave de boca","Martelo"];
+  const PLACES = ["Varanda","Escritório","Hall central","Biblioteca","Sala de jantar","Cozinha","Banheiro","Suíte","Quarto","Escadaria"];
+
+  const ALL_CARDS = [
+    ...PEOPLE.map(n => ({id:`P:${n}`, name:n, type:"people"})),
+    ...WEAPONS.map(n => ({id:`W:${n}`, name:n, type:"weapons"})),
+    ...PLACES.map(n => ({id:`L:${n}`, name:n, type:"places"})),
+  ];
+
+  // ======= Estado (localStorage) =======
+  const LS_KEY = "detetive_helper_v1";
+  const defaultState = () => ({
+    players: [],             // [{name, handSize:null|number}]
+    rounds: [],              // [{ts, asker, responder, guess:{p,w,l}, shownCardId|null, inferredNoHave: {playerName:[cardId...]}}]
+    own: {                   // cartas que "Eu" tem (se existir)
+      "people": [],
+      "weapons": [],
+      "places": []
+    }
+  });
+
+  function loadState(){
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      if(!raw) return defaultState();
+      const s = JSON.parse(raw);
+      // migração leve
+      if(!s.players) return defaultState();
+      s.rounds ||= [];
+      s.own ||= {people:[], weapons:[], places:[]};
+      return s;
+    } catch(e){
+      return defaultState();
+    }
+  }
+  function saveState(){
+    localStorage.setItem(LS_KEY, JSON.stringify(state));
+  }
+
+  let state = loadState();
+
+  // ======= Helpers =======
+  const $ = (id) => document.getElementById(id);
+  const escapeHtml = (str) => (str||"").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  function uniq(arr){ return [...new Set(arr)]; }
+  function rotatePlayersBetween(players, askerName, responderName){
+    // retorna jogadores "entre" asker e responder na ordem circular (exclui asker e responder)
+    // se responderName for "Ninguém", considera todos exceto asker (ninguém mostrou)
+    const n = players.length;
+    const idxA = players.findIndex(p=>p.name===askerName);
+    if(idxA < 0) return [];
+    if(responderName === "__NONE__"){
+      return players.filter(p=>p.name !== askerName).map(p=>p.name);
+    }
+    const idxR = players.findIndex(p=>p.name===responderName);
+    if(idxR < 0) return [];
+    const between = [];
+    let i = (idxA + 1) % n;
+    while(i !== idxR){
+      between.push(players[i].name);
+      i = (i + 1) % n;
+      if(between.length > n) break; // segurança
+    }
+    return between;
+  }
+
+  // ======= UI: render players =======
+  function renderPlayers(){
+    const box = $("playersList");
+    box.innerHTML = "";
+
+    if(state.players.length === 0){
+      box.innerHTML = `<div class="muted">Nenhum jogador ainda. Adicione acima.</div>`;
+      renderSelects();
+      renderOwnCards();
+      recomputeAndRender();
+      return;
+    }
+
+    state.players.forEach((p, idx) => {
+      const row = document.createElement("div");
+      row.className = "itemBox";
+      row.innerHTML = `
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+          <div>
+            <div style="font-weight:800;">${escapeHtml(p.name)}</div>
+            <div class="muted">Ordem: ${idx+1}</div>
+          </div>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <button class="btn small" data-act="up" data-idx="${idx}">↑</button>
+            <button class="btn small" data-act="down" data-idx="${idx}">↓</button>
+            <button class="btn small danger" data-act="del" data-idx="${idx}">Remover</button>
+          </div>
+        </div>
+        <div style="margin-top:10px;">
+          <label>Tamanho da mão (opcional)</label>
+          <input data-act="hand" data-idx="${idx}" inputmode="numeric" placeholder="Ex.: 4" value="${p.handSize ?? ""}">
+        </div>
+      `;
+      box.appendChild(row);
+    });
+
+    box.querySelectorAll("button[data-act]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const act = btn.getAttribute("data-act");
+        const idx = Number(btn.getAttribute("data-idx"));
+        if(act === "del"){
+          const removed = state.players.splice(idx,1);
+          // limpa rounds com esse jogador
+          const rmName = removed[0]?.name;
+          if(rmName){
+            state.rounds = state.rounds.filter(r => r.asker!==rmName && r.responder!==rmName);
+          }
+          saveState();
+          renderPlayers();
+          return;
+        }
+        if(act === "up" && idx > 0){
+          [state.players[idx-1], state.players[idx]] = [state.players[idx], state.players[idx-1]];
+          saveState();
+          renderPlayers();
+          return;
+        }
+        if(act === "down" && idx < state.players.length-1){
+          [state.players[idx+1], state.players[idx]] = [state.players[idx], state.players[idx+1]];
+          saveState();
+          renderPlayers();
+          return;
+        }
+      });
+    });
+
+    box.querySelectorAll("input[data-act='hand']").forEach(inp=>{
+      inp.addEventListener("input", ()=>{
+        const idx = Number(inp.getAttribute("data-idx"));
+        const v = inp.value.trim();
+        if(v === ""){
+          state.players[idx].handSize = null;
+        } else {
+          const num = Number(v);
+          state.players[idx].handSize = (Number.isFinite(num) && num>=0) ? Math.floor(num) : null;
+        }
+        saveState();
+        recomputeAndRender();
+      });
+    });
+
+    renderSelects();
+    renderOwnCards();
+    recomputeAndRender();
+  }
+
+  function renderSelects(){
+    const asker = $("selAsker");
+    const responder = $("selResponder");
+    const shown = $("selShownCard");
+
+    const players = state.players.map(p=>p.name);
+
+    asker.innerHTML = players.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("");
+    responder.innerHTML =
+      `<option value="__NONE__">Ninguém</option>` +
+      players.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("");
+
+    // shown card: "Não sei" + três cartas do palpite (atualiza em updateShownDropdown)
+    shown.innerHTML = `<option value="__UNKNOWN__">Não sei</option>`;
+    updateShownDropdown();
+  }
+
+  // ======= UI: suspects selection =======
+  const selection = { person:null, weapon:null, place:null };
+
+  function renderSuspects(){
+    const peopleBox = $("suspectsPeople");
+    const weaponsBox = $("suspectsWeapons");
+    const placesBox = $("suspectsPlaces");
+
+    function mkPill(cardId, label, kind){
+      const div = document.createElement("div");
+      div.className = "pill";
+      div.textContent = label;
+      div.addEventListener("click", ()=>{
+        if(kind==="person") selection.person = (selection.person===cardId? null : cardId);
+        if(kind==="weapon") selection.weapon = (selection.weapon===cardId? null : cardId);
+        if(kind==="place") selection.place = (selection.place===cardId? null : cardId);
+        renderSuspects();
+        updateShownDropdown();
+      });
+      const selected =
+        (kind==="person" && selection.person===cardId) ||
+        (kind==="weapon" && selection.weapon===cardId) ||
+        (kind==="place" && selection.place===cardId);
+      if(selected) div.classList.add("selected");
+      return div;
+    }
+
+    peopleBox.innerHTML = "";
+    weaponsBox.innerHTML = "";
+    placesBox.innerHTML = "";
+
+    PEOPLE.forEach(n => peopleBox.appendChild(mkPill(`P:${n}`, n, "person")));
+    WEAPONS.forEach(n => weaponsBox.appendChild(mkPill(`W:${n}`, n, "weapon")));
+    PLACES.forEach(n => placesBox.appendChild(mkPill(`L:${n}`, n, "place")));
+  }
+
+  function updateShownDropdown(){
+    const shown = $("selShownCard");
+    const keep = shown.value || "__UNKNOWN__";
+
+    const opts = [`<option value="__UNKNOWN__">Não sei</option>`];
+    const triple = [selection.person, selection.weapon, selection.place].filter(Boolean);
+    triple.forEach(cid=>{
+      const c = ALL_CARDS.find(x=>x.id===cid);
+      if(c) opts.push(`<option value="${escapeHtml(cid)}">${escapeHtml(c.name)}</option>`);
+    });
+    shown.innerHTML = opts.join("");
+    // tenta preservar seleção se ainda existir
+    const stillExists = [...shown.options].some(o => o.value === keep);
+    shown.value = stillExists ? keep : "__UNKNOWN__";
+  }
+
+  // ======= UI: own cards =======
+  function renderOwnCards(){
+    const hasMe = state.players.some(p=>p.name.toLowerCase() === "eu");
+    const boxes = {
+      people: $("ownPeople"),
+      weapons: $("ownWeapons"),
+      places: $("ownPlaces")
+    };
+    Object.values(boxes).forEach(b=>b.innerHTML="");
+
+    function mkOwnPill(cardId, label, type){
+      const div = document.createElement("div");
+      div.className = "pill";
+      div.textContent = label;
+      const owned = state.own[type].includes(cardId);
+      if(owned) div.classList.add("owned");
+      div.addEventListener("click", ()=>{
+        if(!hasMe){
+          alert("Para usar 'Minhas cartas', adicione um jogador chamado 'Eu'.");
+          return;
+        }
+        const arr = state.own[type];
+        if(arr.includes(cardId)){
+          state.own[type] = arr.filter(x=>x!==cardId);
+        } else {
+          state.own[type] = uniq([...arr, cardId]);
+        }
+        saveState();
+        renderOwnCards();
+        recomputeAndRender();
+      });
+      return div;
+    }
+
+    PEOPLE.forEach(n => boxes.people.appendChild(mkOwnPill(`P:${n}`, n, "people")));
+    WEAPONS.forEach(n => boxes.weapons.appendChild(mkOwnPill(`W:${n}`, n, "weapons")));
+    PLACES.forEach(n => boxes.places.appendChild(mkOwnPill(`L:${n}`, n, "places")));
+  }
+
+  // ======= Rodadas: salvar / desfazer / histórico =======
+  function renderHistory(){
+    const box = $("roundHistory");
+    if(state.rounds.length === 0){
+      box.innerHTML = `<div class="muted">Nenhuma rodada registrada ainda.</div>`;
+      return;
+    }
+    box.innerHTML = "";
+    state.rounds.slice().reverse().forEach((r, revIdx)=>{
+      const idx = state.rounds.length - 1 - revIdx;
+      const p = ALL_CARDS.find(c=>c.id===r.guess.p)?.name ?? "?";
+      const w = ALL_CARDS.find(c=>c.id===r.guess.w)?.name ?? "?";
+      const l = ALL_CARDS.find(c=>c.id===r.guess.l)?.name ?? "?";
+      const shownName = (r.shownCardId && r.shownCardId !== "__UNKNOWN__")
+        ? (ALL_CARDS.find(c=>c.id===r.shownCardId)?.name ?? "??")
+        : "Não sei";
+      const responderLabel = (r.responder==="__NONE__") ? "Ninguém" : r.responder;
+
+      const el = document.createElement("div");
+      el.className = "historyItem";
+      el.innerHTML = `
+        <div class="top">
+          <b>#${idx+1} — ${escapeHtml(r.asker)} → ${escapeHtml(responderLabel)}</b>
+          <button class="btn small danger" data-del="${idx}">Excluir</button>
+        </div>
+        <div class="muted" style="margin-top:6px;">
+          Palpite: <span class="mono">${escapeHtml(p)} / ${escapeHtml(w)} / ${escapeHtml(l)}</span><br/>
+          Carta mostrada: <span class="mono">${escapeHtml(shownName)}</span>
+        </div>
+      `;
+      box.appendChild(el);
+    });
+
+    box.querySelectorAll("button[data-del]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const idx = Number(btn.getAttribute("data-del"));
+        state.rounds.splice(idx,1);
+        saveState();
+        renderHistory();
+        recomputeAndRender();
+      });
+    });
+  }
+
+  $("btnSaveRound").addEventListener("click", ()=>{
+    if(state.players.length < 2){
+      alert("Adicione pelo menos 2 jogadores.");
+      return;
+    }
+    if(!selection.person || !selection.weapon || !selection.place){
+      alert("Selecione 1 Pessoa, 1 Arma e 1 Lugar para registrar a rodada.");
+      return;
+    }
+    const asker = $("selAsker").value;
+    const responder = $("selResponder").value;
+    if(!asker){
+      alert("Selecione quem fez o palpite.");
+      return;
+    }
+    if(responder !== "__NONE__" && responder === asker){
+      alert("Quem mostrou a carta não pode ser a mesma pessoa que fez o palpite (na regra padrão).");
+      return;
+    }
+
+    // determina quem foi "passado" na ordem
+    const between = rotatePlayersBetween(state.players, asker, responder);
+    const cards = [selection.person, selection.weapon, selection.place];
+    const inferredNoHave = {};
+    between.forEach(name=>{
+      inferredNoHave[name] = cards.slice();
+    });
+
+    const shown = $("selShownCard").value;
+    const shownCardId = (shown && shown !== "__UNKNOWN__") ? shown : null;
+
+    state.rounds.push({
+      ts: Date.now(),
+      asker,
+      responder,
+      guess: { p: selection.person, w: selection.weapon, l: selection.place },
+      shownCardId,
+      inferredNoHave
+    });
+    saveState();
+    renderHistory();
+    recomputeAndRender();
+  });
+
+  $("btnUndoRound").addEventListener("click", ()=>{
+    if(state.rounds.length === 0) return;
+    state.rounds.pop();
+    saveState();
+    renderHistory();
+    recomputeAndRender();
+  });
+
+  // ======= Dedução (CSP: propagação + busca) =======
+  function computeDeductions(){
+    const players = state.players.map(p=>p.name);
+    const holders = [...players, "__ENVELOPE__"];
+
+    // possible[cardId] = Set(holders)
+    const possible = new Map();
+    ALL_CARDS.forEach(c => possible.set(c.id, new Set(holders)));
+
+    // helper: fix ownership
+    function setOwner(cardId, owner){
+      const set = possible.get(cardId);
+      if(!set) return true;
+      if(!set.has(owner)) return false;
+      set.clear();
+      set.add(owner);
+      return true;
+    }
+    function banOwner(cardId, owner){
+      const set = possible.get(cardId);
+      if(!set) return true;
+      if(set.size === 1 && set.has(owner)) return false;
+      set.delete(owner);
+      return set.size > 0;
+    }
+
+    // apply "Eu tenho"
+    const me = state.players.find(p => p.name.toLowerCase()==="eu")?.name;
+    if(me){
+      const ownIds = [...state.own.people, ...state.own.weapons, ...state.own.places];
+      for(const cid of ownIds){
+        if(!setOwner(cid, me)) return { status:"contradiction", possible };
+      }
+    }
+
+    // apply rounds constraints
+    // - between players: they don't have any of the 3
+    // - responder (if exists): has at least one of the 3 (clause)
+    // - if shownCardId known: that card belongs to responder (must)
+    const clauses = []; // each clause = {holdersAllowed: [responder], cards:[c1,c2,c3]} but is "responder has at least one"
+    for(const r of state.rounds){
+      const triple = [r.guess.p, r.guess.w, r.guess.l];
+
+      // bans for inferred no-have
+      for(const [pl, list] of Object.entries(r.inferredNoHave || {})){
+        for(const cid of list){
+          if(!banOwner(cid, pl)) return { status:"contradiction", possible };
+        }
+      }
+
+      // known shown card
+      if(r.responder !== "__NONE__" && r.shownCardId){
+        if(!setOwner(r.shownCardId, r.responder)) return { status:"contradiction", possible };
+      }
+
+      // responder has at least one of the triple (if responder exists)
+      if(r.responder !== "__NONE__"){
+        clauses.push({ player: r.responder, cards: triple });
+      } else {
+        // nobody could disprove => everyone except asker does NOT have any of the 3.
+        // Isso já foi modelado via inferredNoHave no saveRound (between = all exceto asker).
+        // E não adicionamos outra cláusula.
+      }
+    }
+
+    // build helper structures for propagation
+    const handSize = new Map(state.players.map(p=>[p.name, p.handSize]));
+    const types = { people: PEOPLE.map(n=>`P:${n}`), weapons: WEAPONS.map(n=>`W:${n}`), places: PLACES.map(n=>`L:${n}`) };
+
+    function envelopeTypeConstraintOk(assign){
+      // assign is Map(cardId->owner) for fixed cards only
+      // ensures envelope has exactly 1 of each type eventually; we enforce during search too
+      return true;
+    }
+
+    // Propagation loop
+    function propagate(possibleLocal){
+      let changed = true;
+
+      // for clauses with unknown shown card:
+      // If player is banned from 2 of 3, then must own the third.
+      function clausePropagation(){
+        let anyChange = false;
+        for(const cl of clauses){
+          const p = cl.player;
+          const cards = cl.cards;
+          // if already owns one for sure, ok
+          let sureOwned = false;
+          for(const cid of cards){
+            const set = possibleLocal.get(cid);
+            if(set && set.size===1 && set.has(p)) { sureOwned = true; break; }
+          }
+          if(sureOwned) continue;
+
+          // count how many are impossible for player
+          const possibleForP = cards.filter(cid => possibleLocal.get(cid)?.has(p));
+          if(possibleForP.length === 0){
+            return { ok:false, changed:false };
+          }
+          if(possibleForP.length === 1){
+            const only = possibleForP[0];
+            const set = possibleLocal.get(only);
+            if(set.size !== 1){
+              set.clear(); set.add(p);
+              anyChange = true;
+            }
+          }
+        }
+        return { ok:true, changed:anyChange };
+      }
+
+      while(changed){
+        changed = false;
+
+        // 1) If any card has only one possible owner -> keep it (already)
+        // 2) If any owner's hand size known, prune
+        // assignedCount[owner] = number of cards fixed to owner
+        const assignedCount = new Map();
+        const possibleCount = new Map();
+        for(const h of [...state.players.map(p=>p.name), "__ENVELOPE__"]){
+          assignedCount.set(h, 0);
+          possibleCount.set(h, 0);
+        }
+        for(const [cid, set] of possibleLocal.entries()){
+          for(const h of set){
+            possibleCount.set(h, (possibleCount.get(h)||0) + 1);
+          }
+          if(set.size === 1){
+            const h = [...set][0];
+            assignedCount.set(h, (assignedCount.get(h)||0) + 1);
+          }
+        }
+
+        for(const p of state.players){
+          const size = handSize.get(p.name);
+          if(size == null) continue;
+          const assigned = assignedCount.get(p.name) || 0;
+          if(assigned > size) return { ok:false };
+          const remainingSlots = size - assigned;
+          // cards that could still be with this player
+          const could = [];
+          for(const [cid, set] of possibleLocal.entries()){
+            if(set.has(p.name) && !(set.size===1 && set.has(p.name))) could.push(cid);
+          }
+          // If no remaining slots => ban all other possibilities for that player
+          if(remainingSlots === 0){
+            for(const cid of could){
+              const set = possibleLocal.get(cid);
+              if(set.size===1 && set.has(p.name)) continue;
+              if(set.delete(p.name)){ changed = true; }
+              if(set.size===0) return { ok:false };
+            }
+          }
+          // If remainingSlots equals number of possible-but-not-fixed cards => they must all belong to player
+          // Only safe if those cards are not already fixed elsewhere
+          if(remainingSlots > 0 && could.length === remainingSlots){
+            for(const cid of could){
+              const set = possibleLocal.get(cid);
+              if(!(set.size===1 && set.has(p.name))){
+                set.clear(); set.add(p.name);
+                changed = true;
+              }
+            }
+          }
+        }
+
+        // 3) Envelope must contain exactly 1 person, 1 weapon, 1 place.
+        // Simple propagation:
+        for(const [type, cardIds] of Object.entries(types)){
+          const envPossible = cardIds.filter(cid => possibleLocal.get(cid)?.has("__ENVELOPE__"));
+          const envFixed = cardIds.filter(cid => {
+            const set = possibleLocal.get(cid);
+            return set && set.size===1 && set.has("__ENVELOPE__");
+          });
+
+          if(envFixed.length > 1) return { ok:false };
+          if(envFixed.length === 1){
+            // then all other cards of same type cannot be in envelope
+            const fixedCid = envFixed[0];
+            for(const cid of cardIds){
+              if(cid === fixedCid) continue;
+              const set = possibleLocal.get(cid);
+              if(set.delete("__ENVELOPE__")) changed = true;
+              if(set.size===0) return { ok:false };
+            }
+          } else {
+            // none fixed yet; if only one can be in envelope, fix it
+            if(envPossible.length === 0) return { ok:false };
+            if(envPossible.length === 1){
+              const only = envPossible[0];
+              const set = possibleLocal.get(only);
+              if(!(set.size===1 && set.has("__ENVELOPE__"))){
+                set.clear(); set.add("__ENVELOPE__");
+                changed = true;
+              }
+            }
+          }
+        }
+
+        // 4) Clause propagation
+        const clp = clausePropagation();
+        if(!clp.ok) return { ok:false };
+        if(clp.changed) changed = true;
+
+        // 5) If a card is fixed to some owner, ban it from all others (already implied by set size 1)
+        // no-op.
+
+      }
+      return { ok:true };
+    }
+
+    // Create deep copy of possible map
+    function clonePossible(pos){
+      const m = new Map();
+      for(const [k,v] of pos.entries()){
+        m.set(k, new Set(v));
+      }
+      return m;
+    }
+
+    // Backtracking to find consistent solutions (we care especially about envelope uniqueness)
+    const MAX_SOLUTIONS = 5000; // safety
+    const solutions = [];
+    const startPos = clonePossible(possible);
+    const prop0 = propagate(startPos);
+    if(!prop0.ok){
+      return { status:"contradiction", possible: startPos, solutions: [] };
+    }
+
+    function pickMostConstrained(pos){
+      let bestCid = null;
+      let bestSize = Infinity;
+      for(const c of ALL_CARDS){
+        const set = pos.get(c.id);
+        const sz = set.size;
+        if(sz > 1 && sz < bestSize){
+          bestSize = sz;
+          bestCid = c.id;
+        }
+      }
+      return bestCid;
+    }
+
+    // additional check: envelope must end with exactly 1 each type; we already enforce propagation, but during search
+    // we can ensure not forcing envelope > 1 fixed per type
+    function envelopeTypeOk(pos){
+      // no more than 1 fixed in each type
+      const fixedEnv = {people:0,weapons:0,places:0};
+      for(const c of ALL_CARDS){
+        const set = pos.get(c.id);
+        if(set.size===1 && set.has("__ENVELOPE__")){
+          fixedEnv[c.type] += 1;
+          if(fixedEnv[c.type] > 1) return false;
+        }
+      }
+      // also must have at least one candidate for each type to be envelope
+      for(const t of ["people","weapons","places"]){
+        const any = ALL_CARDS.filter(c=>c.type===t).some(c => pos.get(c.id)?.has("__ENVELOPE__"));
+        if(!any) return false;
+      }
+      return true;
+    }
+
+    function search(pos){
+      if(solutions.length >= MAX_SOLUTIONS) return;
+      // if fully assigned, record solution
+      const cid = pickMostConstrained(pos);
+      if(!cid){
+        // ensure envelope has exactly 1 per type
+        const env = {people:null,weapons:null,places:null};
+        for(const c of ALL_CARDS){
+          const set = pos.get(c.id);
+          if(set.size===1 && set.has("__ENVELOPE__")){
+            env[c.type] = c.id;
+          }
+        }
+        if(env.people && env.weapons && env.places){
+          solutions.push({ env, pos });
+        }
+        return;
+      }
+      const options = [...pos.get(cid)];
+      for(const owner of options){
+        const next = clonePossible(pos);
+        next.get(cid).clear();
+        next.get(cid).add(owner);
+
+        if(!envelopeTypeOk(next)) continue;
+
+        const pr = propagate(next);
+        if(!pr.ok) continue;
+
+        // small prune: if some type already has 1 fixed envelope, others cannot also be fixed (handled)
+        search(next);
+        if(solutions.length >= MAX_SOLUTIONS) return;
+      }
+    }
+
+    search(startPos);
+
+    return { status:"ok", possible: startPos, solutions };
+  }
+
+  // ======= Render deduction results =======
+  function recomputeAndRender(){
+    const result = computeDeductions();
+    renderDeduction(result);
+  }
+
+  function renderDeduction(result){
+    const solutionBox = $("solutionBox");
+    const perPlayerBox = $("perPlayerBox");
+
+    if(state.players.length < 2){
+      solutionBox.innerHTML = `<div class="muted">Adicione jogadores para começar.</div>`;
+      perPlayerBox.innerHTML = "";
+      return;
+    }
+
+    if(result.status === "contradiction"){
+      solutionBox.innerHTML = `
+        <div class="tag bad">Contradição</div>
+        <div class="muted" style="margin-top:8px;">
+          Alguma rodada ou “minhas cartas” conflita com as regras (ex.: marcou uma carta como sua e depois ela aparece como certa de outro jogador).
+          Revise o histórico ou faça reset.
+        </div>
+      `;
+      perPlayerBox.innerHTML = "";
+      return;
+    }
+
+    // Aggregate envelope possibilities across solutions
+    const sols = result.solutions;
+    const holders = [...state.players.map(p=>p.name), "__ENVELOPE__"];
+
+    // If no solutions found (but not contradiction), it means constraints too strict; treat as contradiction-like
+    if(sols.length === 0){
+      solutionBox.innerHTML = `
+        <div class="tag bad">Sem soluções</div>
+        <div class="muted" style="margin-top:8px;">
+          Com as rodadas registradas, não existe nenhuma distribuição de cartas consistente.
+          Normalmente isso indica que algum “asker/responder” ou “carta mostrada” foi registrado errado.
+        </div>
+      `;
+      perPlayerBox.innerHTML = "";
+      return;
+    }
+
+    function envSet(type){
+      const set = new Set();
+      for(const s of sols){
+        set.add(s.env[type]);
+      }
+      return set;
+    }
+    const envPeople = envSet("people");
+    const envWeapons = envSet("weapons");
+    const envPlaces = envSet("places");
+
+    const envUnique = (envPeople.size===1 && envWeapons.size===1 && envPlaces.size===1);
+    const cName = (cid)=> ALL_CARDS.find(c=>c.id===cid)?.name ?? "?";
+
+    const tag = envUnique ? `<div class="tag ok">Envelope resolvido ✅</div>` : `<div class="tag warn">Envelope ainda não é único</div>`;
+    const solLine = (set, label) => {
+      const arr = [...set].map(cName);
+      if(arr.length === 1) return `<div><b>${label}:</b> <span class="mono">${escapeHtml(arr[0])}</span></div>`;
+      return `<div><b>${label}:</b> <span class="mono">${escapeHtml(arr.join(" | "))}</span></div>`;
+    };
+
+    solutionBox.innerHTML = `
+      ${tag}
+      <div class="muted" style="margin-top:8px;">Soluções consistentes encontradas: <span class="mono">${sols.length}</span></div>
+      <div class="hr"></div>
+      ${solLine(envPeople,"Pessoa (centro)")}
+      ${solLine(envWeapons,"Arma (centro)")}
+      ${solLine(envPlaces,"Lugar (centro)")}
+      <div class="muted" style="margin-top:10px;">
+        Dica: preencher “Minhas cartas” e/ou “carta mostrada” deixa o resultado ficar único bem mais rápido.
+      </div>
+    `;
+
+    // Per player: definite vs possible using intersection/union across solutions
+    // We'll compute for each player: cards that are ALWAYS with them (fixed across all solutions) and cards that they COULD have (in at least one solution)
+    const players = state.players.map(p=>p.name);
+
+    function initMapPlayers(){
+      const obj = {};
+      for(const p of players){
+        obj[p] = { always: new Set(ALL_CARDS.map(c=>c.id)), any: new Set() };
+      }
+      return obj;
+    }
+    const pp = initMapPlayers();
+
+    // For each solution, build owner mapping from pos
+    for(const s of sols){
+      // for each player, gather their cards in this solution
+      const ownedThis = {};
+      for(const p of players) ownedThis[p] = new Set();
+
+      for(const c of ALL_CARDS){
+        const set = s.pos.get(c.id);
+        const owner = [...set][0]; // fully assigned
+        if(ownedThis[owner]) ownedThis[owner].add(c.id);
+      }
+
+      for(const p of players){
+        // always = intersection
+        pp[p].always = new Set([...pp[p].always].filter(x => ownedThis[p].has(x)));
+        // any = union
+        for(const cid of ownedThis[p]) pp[p].any.add(cid);
+      }
+    }
+
+    // render per player
+    perPlayerBox.innerHTML = "";
+    for(const p of players){
+      const always = [...pp[p].always].map(cName);
+      const any = [...pp[p].any].map(cName);
+
+      // show always (certain)
+      const alwaysHtml = always.length
+        ? always.map(n=>`<span class="tag ok">${escapeHtml(n)}</span>`).join(" ")
+        : `<span class="muted">Nenhuma certeza ainda.</span>`;
+
+      // show any-but-not-always
+      const maybe = any.filter(n => !always.includes(n));
+      const maybeHtml = maybe.length
+        ? maybe.slice(0, 18).map(n=>`<span class="tag">${escapeHtml(n)}</span>`).join(" ")
+          + (maybe.length>18 ? ` <span class="muted">(+${maybe.length-18}…)</span>` : "")
+        : `<span class="muted">Sem opções extras (ou já tudo certo).</span>`;
+
+      const el = document.createElement("div");
+      el.className = "itemBox";
+      el.innerHTML = `
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+          <div style="font-weight:900;">${escapeHtml(p)}</div>
+          <div class="muted">mão: <span class="mono">${state.players.find(x=>x.name===p)?.handSize ?? "?"}</span></div>
+        </div>
+        <div class="muted" style="margin-top:8px;">Certezas:</div>
+        <div class="list" style="margin-top:6px;">${alwaysHtml}</div>
+        <div class="muted" style="margin-top:10px;">Possíveis (em alguma solução):</div>
+        <div class="list" style="margin-top:6px;">${maybeHtml}</div>
+      `;
+      perPlayerBox.appendChild(el);
+    }
+  }
+
+  // ======= Buttons =======
+  $("btnAddPlayer").addEventListener("click", ()=>{
+    const name = $("playerName").value.trim();
+    if(!name){ $("playerName").focus(); return; }
+    if(state.players.some(p=>p.name.toLowerCase()===name.toLowerCase())){
+      alert("Já existe um jogador com esse nome.");
+      return;
+    }
+    state.players.push({ name, handSize: null });
+    $("playerName").value = "";
+    saveState();
+    renderPlayers();
+  });
+
+  $("btnAddMe").addEventListener("click", ()=>{
+    if(state.players.some(p=>p.name.toLowerCase()==="eu")){
+      alert("Já existe um jogador chamado 'Eu'.");
+      return;
+    }
+    state.players.push({ name: "Eu", handSize: null });
+    saveState();
+    renderPlayers();
+  });
+
+  $("btnReset").addEventListener("click", ()=>{
+    if(confirm("Tem certeza? Isso apaga jogadores, rodadas e suas cartas (somente neste navegador).")){
+      localStorage.removeItem(LS_KEY);
+      state = defaultState();
+      // limpa seleções
+      selection.person = selection.weapon = selection.place = null;
+      renderSuspects();
+      renderPlayers();
+      renderHistory();
+    }
+  });
+
+  $("btnRecompute").addEventListener("click", ()=>{
+    recomputeAndRender();
+  });
+
+  // ======= Init =======
+  renderSuspects();
+  renderPlayers();
+  renderHistory();
+
+})();
+</script>
+</body>
+</html>
