@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -23,18 +23,22 @@
         font-family:"Comic Sans MS","Baloo 2","Fredoka",system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
       }
 
-      /* ===== Layout blindado (evita footer "capturar clique") ===== */
+      /* ===== Layout principal ===== */
       .container{
         min-height:100vh;
         display:flex;
         flex-direction:column;
       }
       header, footer{
-        padding:8px 12px;
+        padding:12px 16px;
         text-align:center;
         border:none;
         box-shadow:none;
         flex-shrink:0;
+        width:100%;
+        display:flex;
+        justify-content:center;
+        align-items:center;
       }
       main{
         flex:1 0 auto;           /* empurra footer pro final */
@@ -47,36 +51,62 @@
         z-index:2;               /* garante main por cima */
       }
 
-      .header-placeholder,.footer-placeholder{
+      /* ===== Header com proporção correta e bem visível ===== */
+      .header-placeholder{
         display:flex;
         align-items:center;
         justify-content:center;
-        padding:0;
+        padding:6px 0;
+        min-height:160px;
+        width:100%;
       }
-      .header-placeholder{ height:160px; }
-      .footer-placeholder{ height:90px; overflow:hidden; }
-
-      .header-placeholder img,
-      .footer-placeholder img{
-        max-width:15%;
-        max-height:15%;
+      .header-placeholder img{
+        max-height:160px;
+        max-width:min(100%, 360px);
         height:auto;
         width:auto;
+        object-fit:contain;
         display:block;
+        margin:0 auto;
       }
 
-      /* CRÍTICO: footer não captura clique, só o <a> captura */
-      footer{ pointer-events:none; }
+      /* ===== Footer alinhado ao centro e responsivo ===== */
+      footer{
+        pointer-events:none;
+      }
+      .footer-placeholder{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:8px 0;
+        width:100%;
+      }
       .footer-placeholder a{
         pointer-events:auto;
-        display:inline-block;
-        line-height:0;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        text-decoration:none;
+      }
+      .footer-placeholder img{
+        max-height:80px;
+        max-width:min(100%, 460px);
+        height:auto;
+        width:auto;
+        object-fit:contain;
+        display:block;
+        margin:0 auto;
       }
 
       h1{ margin:0 0 8px; font-size:28px; letter-spacing:1px; }
       p.descricao{ margin:0 0 20px; font-size:14px; }
 
-      #status{ min-height:18px; font-size:13px; margin-bottom:8px; }
+      #status{
+        min-height:20px;
+        font-size:14px;
+        margin-bottom:12px;
+        font-weight:bold;
+      }
 
       /* Lista sem cara de planilha */
       table{ width:100%; border-collapse:separate; border-spacing:0 10px; }
@@ -103,6 +133,7 @@
         border-radius:999px;
         text-align:center;
         font-family:inherit;
+        font-size:14px;
         display:block;
         margin:0 auto;
         background:#fff;
@@ -137,7 +168,7 @@
 
       .btn:hover{ transform:translate(-2px,-2px); box-shadow:5px 5px 0 #000; filter:brightness(1.05); }
       .btn:active{ transform:translate(1px,1px); box-shadow:1px 1px 0 #000; }
-      .btn:disabled{ opacity:.55; cursor:not-allowed; filter:none; }
+      .btn:disabled{ opacity:.55; cursor:not-allowed; filter:none; transform:none; box-shadow:2px 2px 0 #000; }
 
       .linha-botoes{
         display:flex;
@@ -155,19 +186,19 @@
       @media (max-width:768px){
         main{ padding:12px; }
         h1{ font-size:24px; }
-        .header-placeholder{ height:130px; }
-        .header-placeholder img { max-width: 80%; max-height: 80%; }
-        .footer-placeholder{ height:70px; }
-        .footer-placeholder img{ max-width: 70%; max-height: 70%;position: relative;}
+        .header-placeholder{ min-height:130px; }
+        .header-placeholder img{ max-height:130px; max-width:85%; }
+        .footer-placeholder{ min-height:70px; }
+        .footer-placeholder img{ max-height:65px; max-width:85%; }
       }
       @media (max-width:480px){
         main{ padding:10px; }
         h1{ font-size:22px; }
         p.descricao{ font-size:13px; }
-        .header-placeholder{ height:110px; }
-        .header-placeholder img { max-width: 80%; max-height: 80%; }
-        .footer-placeholder{ height:60px; }
-        .footer-placeholder img{ max-width: 70%; max-height: 70%;position: relative;}
+        .header-placeholder{ min-height:110px; }
+        .header-placeholder img{ max-height:110px; max-width:85%; }
+        .footer-placeholder{ min-height:60px; }
+        .footer-placeholder img{ max-height:55px; max-width:85%; }
 
         .linha-botoes{
           flex-direction:column;
@@ -182,14 +213,14 @@
     <div class="container">
       <header>
         <div class="header-placeholder">
-          <img src="familyguys.png" alt="header" />
+          <img src="familyguys.png" alt="Amigo Secreto Header" />
         </div>
       </header>
 
       <main>
         <h1>Amigo Secreto</h1>
         <p class="descricao">
-          Digite apenas os nomes, clique em <strong>Sortear</strong> e depois use <strong>WA/TG/CP</strong> para enviar.
+          Digite os nomes dos participantes, clique em <strong>Sortear</strong> e depois use <strong>WA/TG/CP</strong> para enviar o link individual para cada amigo.
         </p>
 
         <div id="status"></div>
@@ -206,7 +237,7 @@
         <div id="resultado" class="hidden">
           <h2>Envio de links</h2>
           <p style="font-size:13px; margin:0 0 10px;">
-            Botões pequenos lado a lado: <strong>WA</strong> WhatsApp, <strong>TG</strong> Telegram, <strong>CP</strong> copiar mensagem.
+            Envie o link exclusivo de cada participante: <strong>WA</strong> WhatsApp, <strong>TG</strong> Telegram, <strong>CP</strong> copiar link.
           </p>
 
           <table>
@@ -217,24 +248,33 @@
 
       <footer>
         <div class="footer-placeholder">
-          <a href="https://instagram.com/brunopatriots" target="_blank" rel="noreferrer">
-            <img src="foot2.gif" alt="footer" />
+          <a href="https://instagram.com/brunopatriots" target="_blank" rel="noreferrer" title="Instagram">
+            <img src="foot2.gif" alt="Footer Animation" />
           </a>
         </div>
       </footer>
     </div>
 
     <script>
-      // COLE AQUI seu Web App (Apps Script /exec)
+      // Web App Google Apps Script (/exec)
       const APP_URL = 'https://script.google.com/macros/s/AKfycbz2lDkpVnBRLzc72iXHIgvDVLOBXnPLgXN4nIQGUhF-LpqR9XiqztdQ7X_G8eYPKHPJ3g/exec';
 
-      // Link de visualização vai para ver.html?t=TOKEN
-      const VIEW_URL = new URL('ver.html', window.location.href).toString().split('?')[0].split('#')[0];
+      // Resolução segura do link ver.html (compatível com GitHub Pages com ou sem barra final)
+      function getViewUrl() {
+        const loc = window.location;
+        let pathname = loc.pathname;
+        if (!pathname.endsWith('/')) {
+          pathname = pathname.substring(0, pathname.lastIndexOf('/') + 1);
+        }
+        return loc.origin + pathname + 'ver.html';
+      }
+
+      const VIEW_URL = getViewUrl();
 
       function mostrarStatus(msg, erro=false){
         const el = document.getElementById('status');
         el.textContent = msg || '';
-        el.style.color = erro ? 'red' : 'black';
+        el.style.color = erro ? '#d32f2f' : '#2e7d32';
       }
 
       function adicionarLinha(nome=''){
@@ -244,7 +284,7 @@
         const tdNome = document.createElement('td');
         const input = document.createElement('input');
         input.type = 'text';
-        input.placeholder = 'Nome';
+        input.placeholder = 'Nome do participante';
         input.value = nome;
         tdNome.appendChild(input);
 
@@ -253,8 +293,14 @@
         btnX.type = 'button';
         btnX.className = 'btn btn-mini';
         btnX.textContent = 'X';
-        btnX.title = 'Remover';
-        btnX.onclick = () => tbody.removeChild(tr);
+        btnX.title = 'Remover participante';
+        btnX.onclick = () => {
+          if (tbody.children.length > 2) {
+            tbody.removeChild(tr);
+          } else {
+            mostrarStatus('Mantenha pelo menos 2 participantes.', true);
+          }
+        };
         tdAcoes.appendChild(btnX);
 
         tr.appendChild(tdNome);
@@ -265,16 +311,26 @@
       function coletarParticipantes(){
         const rows = document.querySelectorAll('#participantsBody tr');
         const arr = [];
+        const seen = new Set();
+        let hasDuplicate = false;
+
         rows.forEach(r => {
           const name = (r.querySelector('input')?.value || '').trim();
-          if (name) arr.push({ name });
+          if (name) {
+            const key = name.toLowerCase();
+            if (seen.has(key)) {
+              hasDuplicate = true;
+            }
+            seen.add(key);
+            arr.push({ name });
+          }
         });
-        return arr;
+        return { participants: arr, hasDuplicate };
       }
 
       function montarMensagem(name, token){
         const link = VIEW_URL + '?t=' + encodeURIComponent(token);
-        return `Olá ${name}, clique no link abaixo pra saber quem você tirou no amigo secreto:\n${link}`;
+        return `Olá ${name}, clique no link abaixo para ver quem você tirou no Amigo Secreto:\n${link}`;
       }
 
       function abrirWhatsApp(texto){
@@ -290,10 +346,10 @@
       function copiarTexto(texto){
         if (navigator.clipboard?.writeText) {
           navigator.clipboard.writeText(texto)
-            .then(() => alert('Mensagem copiada!'))
-            .catch(() => window.prompt('Copie a mensagem:', texto));
+            .then(() => alert('Mensagem copiada com sucesso!'))
+            .catch(() => window.prompt('Copie a mensagem abaixo:', texto));
         } else {
-          window.prompt('Copie a mensagem:', texto);
+          window.prompt('Copie a mensagem abaixo:', texto);
         }
       }
 
@@ -306,6 +362,7 @@
 
           const tdNome = document.createElement('td');
           tdNome.textContent = item.name;
+          tdNome.style.fontWeight = 'bold';
 
           const tdAcoes = document.createElement('td');
           const texto = montarMensagem(item.name, item.token);
@@ -313,19 +370,19 @@
           const btnWA = document.createElement('button');
           btnWA.className = 'btn btn-mini btn-primary';
           btnWA.textContent = 'WA';
-          btnWA.title = 'WhatsApp';
+          btnWA.title = 'Enviar via WhatsApp';
           btnWA.onclick = () => abrirWhatsApp(texto);
 
           const btnTG = document.createElement('button');
           btnTG.className = 'btn btn-mini';
           btnTG.textContent = 'TG';
-          btnTG.title = 'Telegram';
+          btnTG.title = 'Enviar via Telegram';
           btnTG.onclick = () => abrirTelegram(texto, item.token);
 
           const btnCP = document.createElement('button');
           btnCP.className = 'btn btn-mini';
           btnCP.textContent = 'CP';
-          btnCP.title = 'Copiar';
+          btnCP.title = 'Copiar link';
           btnCP.onclick = () => copiarTexto(texto);
 
           tdAcoes.appendChild(btnWA);
@@ -340,40 +397,126 @@
         document.getElementById('resultado').classList.remove('hidden');
       }
 
+      // Requisição resiliente a CORS (fetch com fallback automático para JSONP)
+      function chamarAppsScript(params, timeoutMs = 25000){
+        return new Promise((resolve, reject) => {
+          let settled = false;
+
+          const queryString = Object.keys(params)
+            .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+            .join('&');
+
+          const fetchUrl = APP_URL + '?' + queryString;
+
+          const controller = new AbortController();
+          const timer = setTimeout(() => {
+            if (!settled) {
+              controller.abort();
+              settled = true;
+              reject(new Error('Tempo limite excedido ao conectar com o servidor.'));
+            }
+          }, timeoutMs);
+
+          // 1. Tenta fetch direto
+          fetch(fetchUrl, {
+            method: 'GET',
+            redirect: 'follow',
+            signal: controller.signal
+          })
+          .then(async response => {
+            const text = await response.text();
+            try {
+              return JSON.parse(text);
+            } catch (parseError) {
+              if (text.includes('accounts.google.com') || text.includes('Você precisa ter acesso') || text.includes('Acesso negado')) {
+                throw new Error('Acesso negado no Apps Script. A implantação precisa estar configurada com acesso "Qualquer pessoa" (Anyone).');
+              }
+              throw new Error('Resposta inesperada do servidor.');
+            }
+          })
+          .then(data => {
+            if (!settled) {
+              settled = true;
+              clearTimeout(timer);
+              resolve(data);
+            }
+          })
+          .catch(fetchErr => {
+            // Se falhou por CORS ou rede, tenta fallback JSONP
+            const cbName = 'amigo_cb_' + Math.random().toString(36).substring(2, 9) + '_' + Date.now();
+            const script = document.createElement('script');
+            const jsonpUrl = fetchUrl + '&callback=' + encodeURIComponent(cbName);
+
+            window[cbName] = (data) => {
+              if (!settled) {
+                settled = true;
+                clearTimeout(timer);
+                cleanup();
+                resolve(data);
+              }
+            };
+
+            const cleanup = () => {
+              delete window[cbName];
+              if (script.parentNode) script.parentNode.removeChild(script);
+            };
+
+            script.onerror = () => {
+              if (!settled) {
+                settled = true;
+                clearTimeout(timer);
+                cleanup();
+                reject(fetchErr);
+              }
+            };
+
+            script.src = jsonpUrl;
+            document.head.appendChild(script);
+          });
+        });
+      }
+
       function sortear(){
-        const participants = coletarParticipantes();
+        const { participants, hasDuplicate } = coletarParticipantes();
         if (participants.length < 2) {
-          mostrarStatus('Adicione pelo menos 2 nomes.', true);
+          mostrarStatus('Adicione pelo menos 2 participantes com nome preenchido.', true);
+          return;
+        }
+
+        if (hasDuplicate) {
+          mostrarStatus('Atenção: existem nomes repetidos. Adicione um sobrenome ou inicial para diferenciar.', true);
           return;
         }
 
         const btn = document.getElementById('sortearBtn');
         btn.disabled = true;
-        mostrarStatus('Sorteando... aguarde.');
+        mostrarStatus('Realizando o sorteio... Aguarde um instante.');
 
         const names = participants.map(p => p.name).join('|');
-        const phones = new Array(participants.length).fill('').join('|'); // compat
+        const phones = new Array(participants.length).fill('').join('|');
 
-        const url = APP_URL + '?mode=sortear&names=' + encodeURIComponent(names) + '&phones=' + encodeURIComponent(phones);
-
-        fetch(url)
-          .then(r => r.json())
-          .then(resp => {
-            btn.disabled = false;
-            if (!resp.ok) {
-              mostrarStatus('Erro: ' + (resp.error || 'desconhecido'), true);
-              return;
-            }
-            preencherEnvio(resp.data || []);
-            mostrarStatus('Sorteio pronto! Agora envie os links.');
-          })
-          .catch(err => {
-            btn.disabled = false;
-            mostrarStatus('Erro de conexão: ' + err, true);
-          });
+        chamarAppsScript({
+          mode: 'sortear',
+          names: names,
+          phones: phones
+        })
+        .then(resp => {
+          btn.disabled = false;
+          if (!resp.ok) {
+            mostrarStatus('Erro no sorteio: ' + (resp.error || 'Erro desconhecido'), true);
+            return;
+          }
+          preencherEnvio(resp.data || []);
+          mostrarStatus('Sorteio concluído com sucesso! Envie os links abaixo.');
+        })
+        .catch(err => {
+          btn.disabled = false;
+          mostrarStatus('Erro de conexão com o servidor: ' + err.message, true);
+        });
       }
 
       document.addEventListener('DOMContentLoaded', () => {
+        adicionarLinha();
         adicionarLinha();
         adicionarLinha();
         document.getElementById('addRowBtn').addEventListener('click', () => adicionarLinha());

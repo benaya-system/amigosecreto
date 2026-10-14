@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Amigo Secreto</title>
+    <title>Amigo Secreto - Revelação</title>
 
     <style>
       :root{
-        --bg:#fff; --fg:#000; --border:#000;
-        --btn-blue:#7fd3ff; --btn-yellow:#ffe66b;
+        --bg:#fff;
+        --fg:#000;
+        --border:#000;
+        --btn-blue:#7fd3ff;
+        --btn-yellow:#ffe66b;
       }
       *{ box-sizing:border-box; }
       body{
@@ -25,11 +28,15 @@
         flex-direction:column;
       }
       header, footer{
-        padding:8px 12px;
+        padding:12px 16px;
         text-align:center;
         border:none;
         box-shadow:none;
         flex-shrink:0;
+        width:100%;
+        display:flex;
+        justify-content:center;
+        align-items:center;
       }
       main{
         flex:1 0 auto;
@@ -42,30 +49,51 @@
         z-index:2;
       }
 
-      .header-placeholder,.footer-placeholder{
+      /* ===== Header com proporção correta e bem visível ===== */
+      .header-placeholder{
         display:flex;
         align-items:center;
         justify-content:center;
-        padding:0;
+        padding:6px 0;
+        min-height:160px;
+        width:100%;
       }
-      .header-placeholder{ height:160px; }
-      .footer-placeholder{ height:90px; overflow:hidden; }
-
-      .header-placeholder img,
-      .footer-placeholder img{
-        max-width:100%;
-        max-height:100%;
+      .header-placeholder img{
+        max-height:160px;
+        max-width:min(100%, 360px);
         height:auto;
         width:auto;
+        object-fit:contain;
         display:block;
+        margin:0 auto;
       }
 
-      /* CRÍTICO: footer não captura clique, só o <a> captura */
-      footer{ pointer-events:none; }
+      /* ===== Footer alinhado ao centro e responsivo ===== */
+      footer{
+        pointer-events:none;
+      }
+      .footer-placeholder{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:8px 0;
+        width:100%;
+      }
       .footer-placeholder a{
         pointer-events:auto;
-        display:inline-block;
-        line-height:0;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        text-decoration:none;
+      }
+      .footer-placeholder img{
+        max-height:80px;
+        max-width:min(100%, 460px);
+        height:auto;
+        width:auto;
+        object-fit:contain;
+        display:block;
+        margin:0 auto;
       }
 
       .card{
@@ -76,6 +104,7 @@
         margin:0 auto;
         border-radius:16px;
         box-shadow:4px 4px 0 #000;
+        background:#fff;
       }
 
       h1{ margin:0 0 10px; font-size:24px; letter-spacing:1px; }
@@ -85,22 +114,24 @@
         font-weight:900;
         font-size:14px;
         margin:10px 0 14px;
+        color:#c62828;
       }
       .who{
-        font-size:20px;
+        font-size:22px;
         font-weight:900;
         margin:6px 0 14px;
+        color:#0277bd;
       }
 
       .btn{
         display:inline-block;
-        padding:10px 16px;
-        margin:6px 2px;
+        padding:12px 20px;
+        margin:10px 2px;
         border:3px solid var(--border);
         background:var(--btn-yellow);
         color:var(--fg);
         font-family:inherit;
-        font-size:13px;
+        font-size:14px;
         cursor:pointer;
         text-transform:uppercase;
         letter-spacing:.5px;
@@ -108,28 +139,34 @@
         box-shadow:3px 3px 0 #000;
         transition:transform .08s ease, box-shadow .08s ease, filter .08s ease;
         position:relative;
-        z-index:3; /* extra: botão sempre por cima */
+        z-index:3;
       }
       .btn-primary{ background:var(--btn-blue); }
       .btn:hover{ transform:translate(-2px,-2px); box-shadow:5px 5px 0 #000; filter:brightness(1.05); }
       .btn:active{ transform:translate(1px,1px); box-shadow:1px 1px 0 #000; }
-      .btn:disabled{ opacity:.55; cursor:not-allowed; filter:none; }
+      .btn:disabled{ opacity:.55; cursor:not-allowed; filter:none; transform:none; box-shadow:2px 2px 0 #000; }
 
       .hidden{ display:none; }
-      #status{ min-height:18px; font-size:13px; }
+      #status{
+        min-height:20px;
+        font-size:14px;
+        font-weight:bold;
+      }
 
       .nome{
-        font-size:24px;
+        font-size:26px;
         font-weight:900;
         margin:14px 0 6px;
+        color:#2e7d32;
+        letter-spacing:1px;
       }
       .observacao{
         margin-top:12px;
-        font-size:12px;
+        font-size:13px;
         color:#555;
       }
 
-      /* Presentinho */
+      /* Presentinho animado */
       .gift{
         width:110px; height:110px;
         margin:14px auto 8px;
@@ -167,14 +204,18 @@
 
       @media (max-width:768px){
         main{ padding:12px; }
-        .header-placeholder{ height:130px; }
-        .footer-placeholder{ height:70px; }
+        .header-placeholder{ min-height:130px; }
+        .header-placeholder img{ max-height:130px; max-width:85%; }
+        .footer-placeholder{ min-height:70px; }
+        .footer-placeholder img{ max-height:65px; max-width:85%; }
       }
       @media (max-width:480px){
         main{ padding:10px; }
-        .header-placeholder{ height:110px; }
-        .footer-placeholder{ height:60px; }
-        .card{ width:calc(100% - 18px); padding:18px 14px; }
+        .header-placeholder{ min-height:110px; }
+        .header-placeholder img{ max-height:110px; max-width:85%; }
+        .footer-placeholder{ min-height:60px; }
+        .footer-placeholder img{ max-height:55px; max-width:85%; }
+        .card{ width:calc(100% - 16px); padding:18px 14px; }
         h1{ font-size:22px; }
       }
     </style>
@@ -184,7 +225,7 @@
     <div class="container">
       <header>
         <div class="header-placeholder">
-          <img src="familyguys.png" alt="header" />
+          <img src="familyguys.png" alt="Amigo Secreto Header" />
         </div>
       </header>
 
@@ -193,7 +234,7 @@
           <h1>Amigo Secreto</h1>
 
           <p class="big-warning">
-            ⚠️ ATENÇÃO ⚠️: o nome só poderá ser revelado neste dispositivo.<br/>
+            ⚠️ ATENÇÃO: O nome só poderá ser revelado neste dispositivo.<br/>
             Não abra se você não for a pessoa indicada abaixo.
           </p>
 
@@ -216,7 +257,7 @@
             <div id="result" class="hidden">
               <p>O seu amigo secreto é:</p>
               <p class="nome" id="friendName"></p>
-              <p class="observacao">Guarde este nome em segredo ;) </p>
+              <p class="observacao">Guarde este nome em segredo! ;)</p>
             </div>
           </div>
         </div>
@@ -224,15 +265,15 @@
 
       <footer>
         <div class="footer-placeholder">
-          <a href="https://instagram.com/brunopatriots" target="_blank" rel="noreferrer">
-            <img src="foot2.gif" alt="footer" />
+          <a href="https://instagram.com/brunopatriots" target="_blank" rel="noreferrer" title="Instagram">
+            <img src="foot2.gif" alt="Footer Animation" />
           </a>
         </div>
       </footer>
     </div>
 
     <script>
-      // COLE AQUI seu Web App (Apps Script /exec)
+      // Web App Google Apps Script (/exec)
       const APP_URL = 'https://script.google.com/macros/s/AKfycbz2lDkpVnBRLzc72iXHIgvDVLOBXnPLgXN4nIQGUhF-LpqR9XiqztdQ7X_G8eYPKHPJ3g/exec';
 
       function getToken(){
@@ -246,7 +287,7 @@
           try{
             const arr = new Uint8Array(24);
             crypto.getRandomValues(arr);
-            key = Array.from(arr).map(b=>b.toString(16).padStart(2,'0')).join('');
+            key = Array.from(arr).map(b => b.toString(16).padStart(2,'0')).join('');
           }catch(e){
             key = String(Math.random()).slice(2) + String(Date.now());
           }
@@ -259,7 +300,7 @@
         try{
           const enc = new TextEncoder().encode(str);
           const buf = await crypto.subtle.digest('SHA-256', enc);
-          return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+          return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
         }catch(e){
           return 'h_' + btoa(unescape(encodeURIComponent(str))).slice(0, 40);
         }
@@ -268,23 +309,101 @@
       function setStatus(msg, err=false){
         const el = document.getElementById('status');
         el.textContent = msg || '';
-        el.style.color = err ? 'red' : 'black';
+        el.style.color = err ? '#d32f2f' : '#2e7d32';
+      }
+
+      // Requisição resiliente a CORS (fetch com fallback automático para JSONP)
+      function chamarAppsScript(params, timeoutMs = 25000){
+        return new Promise((resolve, reject) => {
+          let settled = false;
+
+          const queryString = Object.keys(params)
+            .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+            .join('&');
+
+          const fetchUrl = APP_URL + '?' + queryString;
+
+          const controller = new AbortController();
+          const timer = setTimeout(() => {
+            if (!settled) {
+              controller.abort();
+              settled = true;
+              reject(new Error('Tempo limite excedido ao conectar com o servidor.'));
+            }
+          }, timeoutMs);
+
+          fetch(fetchUrl, {
+            method: 'GET',
+            redirect: 'follow',
+            signal: controller.signal
+          })
+          .then(async response => {
+            const text = await response.text();
+            try {
+              return JSON.parse(text);
+            } catch (parseError) {
+              if (text.includes('accounts.google.com') || text.includes('Você precisa ter acesso') || text.includes('Acesso negado')) {
+                throw new Error('Acesso negado no Apps Script. A implantação precisa estar configurada com acesso "Qualquer pessoa" (Anyone).');
+              }
+              throw new Error('Resposta inesperada do servidor.');
+            }
+          })
+          .then(data => {
+            if (!settled) {
+              settled = true;
+              clearTimeout(timer);
+              resolve(data);
+            }
+          })
+          .catch(fetchErr => {
+            const cbName = 'amigo_cb_' + Math.random().toString(36).substring(2, 9) + '_' + Date.now();
+            const script = document.createElement('script');
+            const jsonpUrl = fetchUrl + '&callback=' + encodeURIComponent(cbName);
+
+            window[cbName] = (data) => {
+              if (!settled) {
+                settled = true;
+                clearTimeout(timer);
+                cleanup();
+                resolve(data);
+              }
+            };
+
+            const cleanup = () => {
+              delete window[cbName];
+              if (script.parentNode) script.parentNode.removeChild(script);
+            };
+
+            script.onerror = () => {
+              if (!settled) {
+                settled = true;
+                clearTimeout(timer);
+                cleanup();
+                reject(fetchErr);
+              }
+            };
+
+            script.src = jsonpUrl;
+            document.head.appendChild(script);
+          });
+        });
       }
 
       async function init(){
         const token = getToken();
         if (!token){
-          setStatus('Link inválido (sem token).', true);
+          setStatus('Link inválido: token do sorteio não foi informado.', true);
           return;
         }
 
         const deviceHash = await sha256Hex(getDeviceKey());
 
-        // PEEK não trava (evita falso positivo por preview)
-        const peekUrl = APP_URL + '?mode=peek&t=' + encodeURIComponent(token) + '&d=' + encodeURIComponent(deviceHash);
-
         try{
-          const peek = await fetch(peekUrl).then(r=>r.json());
+          const peek = await chamarAppsScript({
+            mode: 'peek',
+            t: token,
+            d: deviceHash
+          });
 
           if (!peek.ok){
             setStatus('Ops! Não encontramos um amigo secreto para este link.', true);
@@ -295,7 +414,7 @@
           document.getElementById('mainOk').classList.remove('hidden');
 
           if (peek.status === 'locked'){
-            setStatus('⚠️ Esse link já foi visualizado em outro dispositivo. Converse com o organizador.', true);
+            setStatus('⚠️ Este link já foi visualizado em outro dispositivo. Converse com o organizador do sorteio.', true);
             document.getElementById('revealBtn').disabled = true;
             return;
           }
@@ -310,25 +429,18 @@
           revealBtn.onclick = async () => {
             revealBtn.disabled = true;
             revealBtn.textContent = 'Abrindo...';
+            setStatus('Conectando ao cofre do sorteio...');
 
             try{
-              // 1) CLAIM (só no clique!)
-              const claimUrl = APP_URL + '?mode=claim&t=' + encodeURIComponent(token) + '&d=' + encodeURIComponent(deviceHash);
-              const claim = await fetch(claimUrl).then(r=>r.json());
-
-              if (!claim.ok){
-                setStatus('⚠️ Esse link já foi visualizado em outro dispositivo. Converse com o organizador.', true);
-                revealBtn.textContent = 'Revelar meu amigo secreto';
-                revealBtn.disabled = true;
-                return;
-              }
-
-              // 2) REVEAL
-              const revealUrl = APP_URL + '?mode=reveal&t=' + encodeURIComponent(token) + '&d=' + encodeURIComponent(deviceHash);
-              const rev = await fetch(revealUrl).then(r=>r.json());
+              // Modo reveal (auto-trava no dispositivo se ainda não estiver travado)
+              const rev = await chamarAppsScript({
+                mode: 'reveal',
+                t: token,
+                d: deviceHash
+              });
 
               if (!rev.ok){
-                setStatus('⚠️ Esse link já foi visualizado em outro dispositivo. Converse com o organizador.', true);
+                setStatus('⚠️ Este link já foi visualizado em outro dispositivo. Converse com o organizador.', true);
                 revealBtn.textContent = 'Revelar meu amigo secreto';
                 revealBtn.disabled = true;
                 return;
@@ -339,15 +451,16 @@
               friendNameEl.textContent = rev.friendName || '???';
               result.classList.remove('hidden');
               revealBtn.textContent = 'Revelado ✓';
+              revealBtn.disabled = true;
             }catch(e){
-              setStatus('Erro ao revelar. Tente novamente mais tarde.', true);
+              setStatus('Erro ao revelar: ' + e.message + '. Tente novamente.', true);
               revealBtn.textContent = 'Revelar meu amigo secreto';
               revealBtn.disabled = false;
             }
           };
 
         }catch(e){
-          setStatus('Erro ao carregar. Tente novamente mais tarde.', true);
+          setStatus('Erro ao carregar o sorteio: ' + e.message + '. Tente novamente mais tarde.', true);
         }
       }
 
